@@ -5,10 +5,12 @@ export type RootStackParamList = {
   
   export type StackParamList = {
     Home: undefined;
+    UserLists: undefined;
   };
   
   export type TabOneParamList = {
     Home: undefined;
+    UserLists: undefined;
   };
   
 

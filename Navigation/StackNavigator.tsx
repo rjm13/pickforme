@@ -7,6 +7,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 
 import Home from '../screens/Home';
+import UserLists from '../screens/UserLists';
 
 
 import { StackParamList, TabOneParamList } from '../types';
@@ -27,6 +28,11 @@ export default function HomeNavigator() {
       <HomeStack.Screen
         name="Home"
         component={Home}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="UserLists"
+        component={UserLists}
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>

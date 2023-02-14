@@ -4,44 +4,10 @@ import {styles} from '../Components/styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const data = [
-    {
-        id: '1',
-        title: 'List 1',
-        category: 'food',
-        privacy: 'private',
-        symbol: 'diamond',
-        detail: 'Take out',
-        color: 'orange'
-    },
-    {
-        id: '2',
-        title: 'List 2',
-        category: 'food',
-        privacy: 'private',
-        symbol: 'diamond',
-        detail: 'Take out',
-        color: 'cyan'
-    },
-    {
-        id: '3',
-        title: 'List 3',
-        category: 'food',
-        privacy: 'private',
-        symbol: 'diamond',
-        detail: 'Take out',
-        color: 'blue'
-    },
-    {
-        id: '4',
-        title: 'List 4',
-        category: 'food',
-        privacy: 'private',
-        symbol: 'diamond',
-        detail: 'Take out',
-        color: 'red'
-    },
-]
+import {useNavigation} from '@react-navigation/native';
+
+import lists from '../Constants/dummydata'
+
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -49,6 +15,17 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const MyLists = () => {
 
+//get the first 4 from the data set
+    const [data, setData] = useState([{}]);
+
+    useEffect (() => {
+      setData([lists[0], lists[1], lists[2], lists[3]])
+    }, [])
+
+    //navigation hook
+    const navigation = useNavigation();
+
+    //list item
     const Item = ({id, title, category, privacy, symbol, detail, color} : any) => {
 
 
@@ -79,9 +56,12 @@ const MyLists = () => {
                 <Text style={styles.title}>
                     My Lists
                 </Text>
-                <Text style={styles.subtext}>
-                    See all
-                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('UserLists')}>
+                   <Text style={styles.subtext}>
+                        See all
+                    </Text> 
+                </TouchableOpacity>
+                
             </View>
             <View>
                 <FlatList 

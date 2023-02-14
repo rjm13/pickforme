@@ -8,7 +8,7 @@ import MyLists from '../Components/MyLists';
 import CategoryList from '../Components/CategoryList';
 
 
-const Home = () => {
+const Home = ({navigation}:any) => {
 
     const [nextToken, setNextToken] = useState(null)
 

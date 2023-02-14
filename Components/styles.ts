@@ -26,6 +26,18 @@ const styles = StyleSheet.create ({
         backgroundColor: '#00ffff',
         borderRadius: 15,
         overflow: 'hidden',
+    },
+    List : {
+      height: 60, 
+      width: (SCREEN_WIDTH-40), 
+      alignSelf: 'center', 
+      backgroundColor: 'transparent', 
+      borderRadius: 4, 
+      marginVertical: 10, 
+      marginHorizontal: 10, 
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+      alignItems: 'center'
     }
 });
 
