@@ -25,7 +25,14 @@ const List = ({navigation, route}: any) => {
 
     const { id } = route.params;
 
-    const [listItems, setListItems] = useState([{}]);
+    const [listItems, setListItems] = useState([{
+        id: '',
+        name: '',
+        details: '',
+        symbol: ''
+    }]);
+
+    const [picked, setPicked] = useState(false);
 
     const [list, setList] = useState({
         id: '',
@@ -49,6 +56,10 @@ const List = ({navigation, route}: any) => {
         setListItems(lists[numId].items);
         setList(lists[numId]);
     }, [id])
+
+    function getRandomInt(max : any) {
+        return Math.floor(Math.random() * max);
+      }
     
     return (
         <View style={styles.container}>
@@ -85,11 +96,19 @@ const List = ({navigation, route}: any) => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={{justifyContent: 'center'}}>
-                    <Image 
-                        style={{width: 200, height: 200}}
-                        source={require('../assets/magicorb.png')}
-                    />
+                <TouchableOpacity onPress={() => setPicked(!picked)} style={{justifyContent: 'center'}}>
+                    {picked === true ? (
+                        <View style={{width: SCREEN_WIDTH, height: 200}}>
+                            <Text style={[styles.title, {textAlign: 'center', textTransform: 'capitalize'}]}>
+                                {listItems[getRandomInt(listItems.length)].name}
+                            </Text>
+                        </View>
+                    ) : (
+                        <Image 
+                            style={{width: 200, height: 200}}
+                            source={require('../assets/magicorb.png')}
+                        />
+                    )}
                 </TouchableOpacity>
 
                 <View>
