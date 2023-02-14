@@ -30,11 +30,13 @@ const MyLists = () => {
 
 
         return (
-            <View style={{height: 120, width: (SCREEN_WIDTH-40)/2, alignSelf: 'center', backgroundColor: color, borderRadius: 4, marginVertical: 10, marginHorizontal: 10, justifyContent: 'center',}}>
-                <Text style={{color: '#000', padding: 4, textAlign: 'center', fontSize: 15, fontWeight: '600'}}>
-                    {title}
-                </Text>
-            </View>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('List', {id: id})}>
+                <View style={{height: 120, width: (SCREEN_WIDTH-40)/2, alignSelf: 'center', backgroundColor: color, borderRadius: 4, marginVertical: 10, marginHorizontal: 10, justifyContent: 'center',}}>
+                    <Text style={{color: '#000', padding: 4, textAlign: 'center', fontSize: 15, fontWeight: '600'}}>
+                        {title}
+                    </Text>
+                </View>
+            </TouchableWithoutFeedback>
         )
     }
 

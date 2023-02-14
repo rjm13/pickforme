@@ -7,6 +7,7 @@ import { navigationRef } from './RootNavigation';
 
 import { RootStackParamList } from '../types';
 import StackNavigator from './StackNavigator';
+import List from '../screens/List';
 //import LinkingConfiguration from './LinkingConfiguration';
 
 // If you are not familiar with React Navigation, we recommend going through the
@@ -37,6 +38,7 @@ function RootNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false, 
     }} initialRouteName="Root">
       <Stack.Screen name="Root" component={StackNavigator} />
+      <Stack.Screen name="List" component={List} />
     </Stack.Navigator>
   );
 }

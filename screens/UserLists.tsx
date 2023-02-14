@@ -28,33 +28,34 @@ const UserLists = ({navigation}:any) => {
 
     const Item = ({id, title, category, privacy, symbol, detail, color, numItems} : any) => {
         return (
-            <View style={[styles.List, {backgroundColor: color}]}>
-                <View style={{flexDirection: 'row'}}>
-                    {privacy === 'private' ? (
-                        <FontAwesome 
-                            name='lock'
-                            size={22}
-                            color='#000'
-                            style={{paddingHorizontal: 20, alignSelf: 'center'}}
-                        />
-                    ) : null}
-                    <View style={{marginHorizontal: 10}}>
-                    <Text style={{ color: '#000', paddingVertical: 4, fontSize: 18, fontWeight: '600', textTransform: 'capitalize' }}>
-                        {title}
-                    </Text>
-                    <Text style={{ color: '#000', paddingBottom: 4, fontSize: 13, fontWeight: '400', textTransform: 'capitalize' }}>
-                        {category}
-                    </Text>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('List', {id: id})}>
+                <View style={[styles.List, {backgroundColor: color}]}>
+                    <View style={{flexDirection: 'row'}}>
+                        {privacy === 'private' ? (
+                            <FontAwesome 
+                                name='lock'
+                                size={22}
+                                color='#000'
+                                style={{paddingHorizontal: 20, alignSelf: 'center'}}
+                            />
+                        ) : null}
+                        <View style={{marginHorizontal: 10}}>
+                        <Text style={{ color: '#000', paddingVertical: 4, fontSize: 18, fontWeight: '600', textTransform: 'capitalize' }}>
+                            {title}
+                        </Text>
+                        <Text style={{ color: '#000', paddingBottom: 4, fontSize: 13, fontWeight: '400', textTransform: 'capitalize' }}>
+                            {category}
+                        </Text>
+                    </View>
+                    </View>
+                    
+                    <View style={{ marginHorizontal: 20}}>
+                        <Text style={{ textAlign: 'center', color: '#000', paddingVertical: 4, fontSize: 26, fontWeight: '900' }}>
+                            {numItems}
+                        </Text>
+                    </View>
                 </View>
-                </View>
-                
-                <View style={{ marginHorizontal: 20}}>
-                    <Text style={{ textAlign: 'center', color: '#000', paddingVertical: 4, fontSize: 26, fontWeight: '900' }}>
-                        {numItems}
-                    </Text>
-                </View>
-                
-            </View>
+            </TouchableWithoutFeedback>
         )
     }
 

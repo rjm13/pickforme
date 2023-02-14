@@ -9,7 +9,27 @@ const lists = [
         color: 'orange',
         numItems: 26,
         createdAt: 'time',
-        updatedAt: 'time'
+        updatedAt: 'time',
+        items: [
+            {
+                id: '1',
+                name: 'steak and lobster',
+                details: 'a big juicy steak and lobster dinner with potatoes on the side.',
+                symbol: 'diamond',
+            },
+            {
+                id: '2',
+                name: 'grilled cheese sandis',
+                details: 'a nice grilled cheese paried with tomato soup for dipping.',
+                symbol: 'diamond',
+            },
+            {
+                id: '3',
+                name: 'alphabet soup',
+                details: 'all the letters you could ever want.',
+                symbol: 'diamond',
+            },
+        ]
     },
     {
         id: '2',
@@ -21,7 +41,27 @@ const lists = [
         color: 'cyan',
         numItems: 113,
         createdAt: 'time',
-        updatedAt: 'time'
+        updatedAt: 'time',
+        items: [
+            {
+                id: '1',
+                name: 'steak and lobster',
+                details: 'a big juicy steak and lobster dinner with potatoes on the side.',
+                symbol: 'diamond',
+            },
+            {
+                id: '2',
+                name: 'grilled cheese sandis',
+                details: 'a nice grilled cheese paried with tomato soup for dipping.',
+                symbol: 'diamond',
+            },
+            {
+                id: '3',
+                name: 'alphabet soup',
+                details: 'all the letters you could ever want.',
+                symbol: 'diamond',
+            },
+        ]
     },
     {
         id: '3',
@@ -33,7 +73,27 @@ const lists = [
         color: 'lime',
         numItems: 8,
         createdAt: 'time',
-        updatedAt: 'time'
+        updatedAt: 'time',
+        items: [
+            {
+                id: '1',
+                name: 'steak and lobster',
+                details: 'a big juicy steak and lobster dinner with potatoes on the side.',
+                symbol: 'diamond',
+            },
+            {
+                id: '2',
+                name: 'grilled cheese sandis',
+                details: 'a nice grilled cheese paried with tomato soup for dipping.',
+                symbol: 'diamond',
+            },
+            {
+                id: '3',
+                name: 'alphabet soup',
+                details: 'all the letters you could ever want.',
+                symbol: 'diamond',
+            },
+        ]
     },
     {
         id: '4',
@@ -45,7 +105,27 @@ const lists = [
         color: 'pink',
         numItems: 14,
         createdAt: 'time',
-        updatedAt: 'time'
+        updatedAt: 'time',
+        items: [
+            {
+                id: '1',
+                name: 'steak and lobster',
+                details: 'a big juicy steak and lobster dinner with potatoes on the side.',
+                symbol: 'diamond',
+            },
+            {
+                id: '2',
+                name: 'grilled cheese sandis',
+                details: 'a nice grilled cheese paried with tomato soup for dipping.',
+                symbol: 'diamond',
+            },
+            {
+                id: '3',
+                name: 'alphabet soup',
+                details: 'all the letters you could ever want.',
+                symbol: 'diamond',
+            },
+        ]
     },
     {
         id: '5',
@@ -57,7 +137,27 @@ const lists = [
         color: 'orange',
         numItems: 26,
         createdAt: 'time',
-        updatedAt: 'time'
+        updatedAt: 'time',
+        items: [
+            {
+                id: '1',
+                name: 'steak and lobster',
+                details: 'a big juicy steak and lobster dinner with potatoes on the side.',
+                symbol: 'diamond',
+            },
+            {
+                id: '2',
+                name: 'grilled cheese sandis',
+                details: 'a nice grilled cheese paried with tomato soup for dipping.',
+                symbol: 'diamond',
+            },
+            {
+                id: '3',
+                name: 'alphabet soup',
+                details: 'all the letters you could ever want.',
+                symbol: 'diamond',
+            },
+        ]
     },
     {
         id: '6',
@@ -69,7 +169,27 @@ const lists = [
         color: 'cyan',
         numItems: 113,
         createdAt: 'time',
-        updatedAt: 'time'
+        updatedAt: 'time',
+        items: [
+            {
+                id: '1',
+                name: 'steak and lobster',
+                details: 'a big juicy steak and lobster dinner with potatoes on the side.',
+                symbol: 'diamond',
+            },
+            {
+                id: '2',
+                name: 'grilled cheese sandis',
+                details: 'a nice grilled cheese paried with tomato soup for dipping.',
+                symbol: 'diamond',
+            },
+            {
+                id: '3',
+                name: 'alphabet soup',
+                details: 'all the letters you could ever want.',
+                symbol: 'diamond',
+            },
+        ]
     },
     {
         id: '7',
@@ -81,7 +201,27 @@ const lists = [
         color: 'lime',
         numItems: 8,
         createdAt: 'time',
-        updatedAt: 'time'
+        updatedAt: 'time',
+        items: [
+            {
+                id: '1',
+                name: 'steak and lobster',
+                details: 'a big juicy steak and lobster dinner with potatoes on the side.',
+                symbol: 'diamond',
+            },
+            {
+                id: '2',
+                name: 'grilled cheese sandis',
+                details: 'a nice grilled cheese paried with tomato soup for dipping.',
+                symbol: 'diamond',
+            },
+            {
+                id: '3',
+                name: 'alphabet soup',
+                details: 'all the letters you could ever want.',
+                symbol: 'diamond',
+            },
+        ]
     },
     {
         id: '8',
@@ -93,7 +233,27 @@ const lists = [
         color: 'pink',
         numItems: 14,
         createdAt: 'time',
-        updatedAt: 'time'
+        updatedAt: 'time',
+        items: [
+            {
+                id: '1',
+                name: 'steak and lobster',
+                details: 'a big juicy steak and lobster dinner with potatoes on the side.',
+                symbol: 'diamond',
+            },
+            {
+                id: '2',
+                name: 'grilled cheese sandis',
+                details: 'a nice grilled cheese paried with tomato soup for dipping.',
+                symbol: 'diamond',
+            },
+            {
+                id: '3',
+                name: 'alphabet soup',
+                details: 'all the letters you could ever want.',
+                symbol: 'diamond',
+            },
+        ]
     },
 ]
 
