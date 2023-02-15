@@ -4,6 +4,8 @@ import {styles} from '../Components/styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+import {useNavigation} from '@react-navigation/native';
+
 const data = [
     {
         id: '1',
@@ -26,7 +28,7 @@ const data = [
         color: 'yellow'
     },
     {
-        id: '4',
+        id: '5',
         title: 'media',
         color: 'violet'
     },
@@ -38,15 +40,21 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const Categories = () => {
 
+    //navigation hook
+    const navigation = useNavigation();
+
     const Item = ({id, title, category, privacy, symbol, detail, color} : any) => {
 
 
         return (
-            <View style={{height: 60, width: (SCREEN_WIDTH-40), alignSelf: 'center', backgroundColor: color, borderRadius: 4, marginVertical: 10, marginHorizontal: 10, justifyContent: 'center',}}>
-                <Text style={{color: '#000', padding: 4, textAlign: 'center', fontSize: 15, fontWeight: '600'}}>
-                    {title}
-                </Text>
-            </View>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('Category', {id: id})}>
+               <View style={{height: 60, width: (SCREEN_WIDTH-40), alignSelf: 'center', backgroundColor: color, borderRadius: 4, marginVertical: 10, marginHorizontal: 10, justifyContent: 'center',}}>
+                    <Text style={{color: '#000', padding: 4, textAlign: 'center', fontSize: 15, fontWeight: '600'}}>
+                        {title}
+                    </Text>
+                </View> 
+            </TouchableWithoutFeedback>
+            
         )
     }
 

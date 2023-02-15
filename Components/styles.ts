@@ -38,6 +38,27 @@ const styles = StyleSheet.create ({
       justifyContent: 'space-between',
       flexDirection: 'row',
       alignItems: 'center'
+    },
+    paragraph: {
+      fontSize: 14,
+      color: '#fff',
+    },
+    textInputTitle: {
+      color: '#fff',
+      fontWeight: 'normal',
+    },
+    inputfield: {
+        width: '90%',
+        height: 40,
+        backgroundColor: '#363636',
+        padding: 10,
+        borderRadius: 10,
+        alignSelf: 'center',
+    },
+    inputtitle: {
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: '600'
     }
 });
 

@@ -4,6 +4,7 @@ import {styles} from '../Components/styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Searchbar } from 'react-native-paper';
+
 import MyLists from '../Components/MyLists';
 import CategoryList from '../Components/CategoryList';
 
@@ -17,6 +18,8 @@ const Home = ({navigation}:any) => {
 
     //search function trigger that refreshes the search results
     const [didUpdate, setDidUpdate] = useState(false);
+
+    
 
     //focus the keyboard only on initial render
     //const focus = useRef(null)
@@ -39,8 +42,8 @@ const Home = ({navigation}:any) => {
               placeholderTextColor='#000000a5'
               //autoComplete={true}
               onChangeText={onChangeSearch}
-              onIconPress={() => {setNewSearch(searchQuery); setNextToken(null); setDidUpdate(!didUpdate); }}
-              onSubmitEditing={() => {setNewSearch(searchQuery); setNextToken(null); setDidUpdate(!didUpdate);}}
+              onIconPress={() => {setNewSearch(searchQuery); setNextToken(null); setDidUpdate(!didUpdate); navigation.navigate('Search', {searchParams: searchQuery}) }}
+              onSubmitEditing={() => {setNewSearch(searchQuery); setNextToken(null); setDidUpdate(!didUpdate); navigation.navigate('Search', {searchParams: searchQuery})}}
               value={searchQuery}
               //ref={focus}
               maxLength={20}
@@ -74,10 +77,11 @@ const Home = ({navigation}:any) => {
                         size={20}
                         color='#fff'
                         style={{padding: 20}}
+                        onPress={() => navigation.navigate('Settings')}
                     />
                 </View>
 
-                <TouchableOpacity style={{margin: 20}}>
+                <TouchableOpacity onPress={() => navigation.navigate('CreateList')} style={{margin: 20}}>
                     <View style={{borderRadius: 6, borderWidth: 1, borderColor: '#fff', backgroundColor: 'transparent'}}>
                         <Text style={{fontWeight: 'bold', color: '#fff', textAlign: 'center', fontSize: 18, paddingHorizontal: 50, paddingVertical: 10}}>
                             + Create a List

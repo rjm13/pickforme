@@ -8,6 +8,10 @@ import useColorScheme from '../hooks/useColorScheme';
 
 import Home from '../screens/Home';
 import UserLists from '../screens/UserLists';
+import Settings from '../screens/Settings';
+import Search from '../screens/Search';
+import Category from '../screens/Category';
+import CreateList from '../screens/CreateList';
 
 
 import { StackParamList, TabOneParamList } from '../types';
@@ -33,6 +37,26 @@ export default function HomeNavigator() {
       <HomeStack.Screen
         name="UserLists"
         component={UserLists}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Settings"
+        component={Settings}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Search"
+        component={Search}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="Category"
+        component={Category}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="CreateList"
+        component={CreateList}
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>
