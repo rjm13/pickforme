@@ -4,32 +4,52 @@ import {styles} from '../Components/styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {LinearGradient} from 'expo-linear-gradient';
+import {Portal, Modal, Provider} from 'react-native-paper';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const CreateList = ({navigation} : any) => {
 
+    const [didUpdate, setDidUpdate] = useState(false);
+
+    const [activeItem, setActiveItem] = useState(0);
+
     const [listItems, setListItems] = useState([
-        {
-            id: '',
-            name: '',
-            description: '',
-            symbol: '',
-        }
+        // {
+        //     id: '0',
+        //     name: 'take a walk in the fresh air',
+        //     description: 'put some shoes on. go outside. and breathe the fresh air',
+        //     symbol: 'diamond',
+        // }
     ]);
 
-    const Item = ({id, name, description, symbol} : any) => {
+    const Item = ({id, name, description, symbol, index} : any) => {
         return (
-            <View>
-
+            <View style={{height: 60, width: SCREEN_WIDTH-40, backgroundColor: 'lime', justifyContent: 'center', padding: 10, marginTop: 20, alignSelf: 'center', borderRadius: 10}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Text style={{fontSize: 16, fontWeight: '900'}}>
+                        {index}. 
+                    </Text>
+                    <Text style={{width: '80%', fontSize: 16, fontWeight: '500'}}>
+                       {name}
+                    </Text>
+                    <FontAwesome 
+                        name='edit'
+                        color='#000'
+                        size={20}
+                        style={{padding: 10}}
+                        onPress={() => {setActiveItem(index); showModal(); setItemData({id: index.toString(), name: listItems[index]?.name, description: listItems[index]?.description, symbol: listItems[index].symbol })}}
+                    />
+                </View>
             </View>
         );
     }
 
-    const renderItem = ({ item } : any) => (
+    const renderItem = ({ item, index } : any) => (
         <Item 
             id={item.id}
+            index={index}
             name={item.name}
             description={item.description}
             symbol={item.symbol}
@@ -40,25 +60,223 @@ const CreateList = ({navigation} : any) => {
 
     const [data, setData] = useState({
         title: '',
-        check_textInputChange: false,
+        category: '',
+        details: '',
+        privacy: privacy,
     });
+
+    useEffect(() => {
+        setData({
+            ... data,
+            privacy: privacy,
+        });
+    }, [privacy])
 
     const textInputChange = (val : any) => {
         if( val.length !== 0 ) {
             setData({
                 ... data,
                 title: val,
-                check_textInputChange: true
             });
         } else {
             setData({
                 ... data,
-                check_textInputChange: false
             });
         }
+    };
+
+    const catInputChange = (val : any) => {
+        if( val.length !== 0 ) {
+            setData({
+                ... data,
+                category: val,
+            });
+        } else {
+            setData({
+                ... data,
+            });
+        }
+    };
+
+    const detailsInputChange = (val : any) => {
+        if( val.length !== 0 ) {
+            setData({
+                ... data,
+                details: val,
+            });
+        } else {
+            setData({
+                ... data,
+            });
+        }
+    };
+    
+
+    //NameModal
+    const [visible, setVisible] = useState(false);
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const containerStyle = {
+        backgroundColor: '#000', 
+        padding: 20,
+        margin: 20,
+        borderRadius: 15,
+    };
+
+    const [itemData, setItemData] = useState({
+        id: activeItem.toString(),
+        name: '',
+        description: '',
+        symbol: '',
+    });
+
+//modal text input states
+    const nameInputChange = (val : any) => {
+        if( val.length !== 0 ) {
+            setItemData({
+                ... itemData,
+                name: val,
+            });
+        } else {
+            setItemData({
+                ... itemData,
+            });
+        }
+    };
+
+    const descriptionInputChange = (val : any) => {
+        if( val.length !== 0 ) {
+            setItemData({
+                ... itemData,
+                description: val,
+            });
+        } else {
+            setItemData({
+                ... itemData,
+            });
+        }
+    };
+
+    const symbolInputChange = (val : any) => {
+        if( val.length !== 0 ) {
+            setItemData({
+                ... itemData,
+                symbol: val,
+            });
+        } else {
+            setItemData({
+                ... itemData,
+            });
+        }
+    };
+
+    const AddItemToList = () => {
+
+        if (activeItem < listItems.length) {
+                let newArray = [...listItems];
+                newArray[activeItem] = {...newArray[activeItem], id: activeItem.toString(), name: itemData.name, description: itemData.description, symbol: itemData.symbol}
+                setListItems(newArray);
+                hideModal();
+                setDidUpdate(!didUpdate);
+        } else {
+            let newData = listItems.concat([itemData]);
+            setListItems(newData);
+            setDidUpdate(!didUpdate);
+            hideModal(); 
+        }
+
+        
+    };
+
+    useEffect(() => {
+        setItemData({
+            id: '0',
+            name: '',
+            description: '',
+            symbol: '',
+        })
+    }, [didUpdate])
+
+    const RemoveFromArray = () => {
+
     }
 
     return (
+        <Provider>
+            <Portal>
+{/* create list item modal */}
+                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                        <View style={{width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                            <View />
+                            <Text style={styles.title}>
+                                List Item
+                            </Text>
+                            <FontAwesome 
+                                name='trash'
+                                color='#ff0000'
+                                size={20}
+                                style={{padding: 10}}
+                                onPress={RemoveFromArray}
+                            />
+                        </View>
+                        <View style={{marginTop: 40, marginBottom: 6, alignSelf: 'flex-start', marginLeft: 20}}>
+                            <Text style={styles.inputtitle}>
+                                Item name
+                            </Text>
+                        </View>
+                        <View style={styles.inputfield}>
+                            <TextInput 
+                                placeholder={listItems[activeItem]?.name || '....'}
+                                placeholderTextColor='#ffffffa5'
+                                style={styles.textInputTitle}
+                                maxLength={40}
+                                onChangeText={(val) => nameInputChange(val)}
+                                autoCapitalize='none'
+                            />
+                        </View>
+                        <View style={{marginTop: 40, marginBottom: 6, alignSelf: 'flex-start', marginLeft: 20}}>
+                            <Text style={styles.inputtitle}>
+                                Description
+                            </Text>
+                        </View>
+                        <View style={[styles.inputfield, {height: 120}]}>
+                            <TextInput 
+                                placeholder={listItems[activeItem]?.description || '....'}
+                                placeholderTextColor='#ffffffa5'
+                                style={styles.textInputTitle}
+                                maxLength={200}
+                                onChangeText={(val) => descriptionInputChange(val)}
+                                autoCapitalize='sentences'
+                                multiline={true}
+                            />
+                        </View>
+                        <View style={{marginTop: 40, marginBottom: 6, alignSelf: 'flex-start', marginLeft: 20}}>
+                            <Text style={styles.inputtitle}>
+                                Symbol
+                            </Text>
+                        </View>
+                        <View style={styles.inputfield}>
+                            <TextInput 
+                                placeholder={listItems[activeItem]?.symbol || '....'}
+                                placeholderTextColor='#ffffffa5'
+                                style={styles.textInputTitle}
+                                maxLength={40}
+                                onChangeText={(val) => symbolInputChange(val)}
+                                autoCapitalize='none'
+                            />
+                        </View>
+                        <TouchableOpacity onPress={AddItemToList}>
+                            <View style={{marginTop: 80, marginBottom: 20, borderRadius: 20, backgroundColor: 'purple', width: 160, height: 40, justifyContent: 'center'}}>
+                                <Text style={{color: '#fff', fontSize: 18, fontWeight: '600', textAlign: 'center'}}>
+                                    Add item
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+            </Portal>
+
         <View style={styles.container}>
             <FlatList 
                 data={listItems}
@@ -137,7 +355,7 @@ const CreateList = ({navigation} : any) => {
                                 placeholderTextColor='#ffffffa5'
                                 style={styles.textInputTitle}
                                 maxLength={40}
-                                onChangeText={(val) => textInputChange(val)}
+                                onChangeText={(val) => catInputChange(val)}
                                 autoCapitalize='none'
                             />
                         </View>
@@ -153,7 +371,7 @@ const CreateList = ({navigation} : any) => {
                                 placeholderTextColor='#ffffffa5'
                                 style={styles.textInputTitle}
                                 maxLength={40}
-                                onChangeText={(val) => textInputChange(val)}
+                                onChangeText={(val) => detailsInputChange(val)}
                                 autoCapitalize='none'
                             />
                         </View>
@@ -163,8 +381,8 @@ const CreateList = ({navigation} : any) => {
                                 Items
                             </Text>
                         </View>
-                        <TouchableOpacity>
-                        <View style={{alignSelf: 'center', marginTop: 20, justifyContent: 'center', backgroundColor: '#454545a5', width: SCREEN_WIDTH - 40, height: 60, borderRadius: 10, borderColor: 'gray', borderWidth: 1}}>
+                        <TouchableOpacity onPress={() => {setActiveItem(listItems.length); showModal();}}>
+                            <View style={{alignSelf: 'center', marginTop: 20, justifyContent: 'center', backgroundColor: '#454545a5', width: SCREEN_WIDTH - 40, height: 60, borderRadius: 10, borderColor: 'gray', borderWidth: 1}}>
                                 <Text style={{color: '#fff', textAlign: 'center', fontSize: 18, fontWeight: '400'}}>
                                     + Add Item
                                 </Text>
@@ -190,6 +408,7 @@ const CreateList = ({navigation} : any) => {
                 </View>
             </LinearGradient>
         </View>
+        </Provider>
     );
 }
 
