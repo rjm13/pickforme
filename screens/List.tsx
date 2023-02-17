@@ -12,6 +12,8 @@ import {
     Image
 } from 'react-native';
 
+import {Portal, Modal, Provider} from 'react-native-paper';
+
 import {styles} from '../Components/styles';
 import lists from '../Constants/dummydata';
 
@@ -60,8 +62,83 @@ const List = ({navigation, route}: any) => {
     function getRandomInt(max : any) {
         return Math.floor(Math.random() * max);
       }
+
+    //List Items Modal
+    const [visible, setVisible] = useState(false);
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const containerStyle = {
+        backgroundColor: '#000', 
+        padding: 20,
+        borderRadius: 15,
+    };
+
+    const Item = ({id, name, description, symbol, index} : any) => {
+        return (
+            <View style={{height: 60, width: SCREEN_WIDTH-40, backgroundColor: 'lime', justifyContent: 'center', padding: 10, marginTop: 20, alignSelf: 'center', borderRadius: 10}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Text style={{fontSize: 16, fontWeight: '900'}}>
+                        {index}. 
+                    </Text>
+                    <Text style={{width: '80%', fontSize: 16, fontWeight: '500'}}>
+                       {name}
+                    </Text>
+                    <View />
+                    {/* <FontAwesome 
+                        name='edit'
+                        color='#000'
+                        size={20}
+                        style={{padding: 10}}
+                        onPress={() => {setActiveItem(index); showModal(); setItemData({id: index.toString(), name: listItems[index]?.name, description: listItems[index]?.description, symbol: listItems[index].symbol })}}
+                    /> */}
+                </View>
+            </View>
+        );
+    }
+
+    const renderItem = ({ item, index } : any) => (
+        <Item 
+            id={item.id}
+            index={index}
+            name={item.name}
+            description={item.description}
+            symbol={item.symbol}
+        />
+      );
     
     return (
+        <Provider>
+            <Portal>
+                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                    <View>
+                    <FlatList 
+                        data={listItems}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                        showsVerticalScrollIndicator={false} 
+                        ListHeaderComponent={
+                            <View style={{marginBottom: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                                <FontAwesome 
+                                    name='close'
+                                    color='#fff'
+                                    size={20}
+                                    style={{padding: 10}}
+                                    onPress={hideModal}
+                                />
+                                <TouchableWithoutFeedback onPress={() => navigation.navigate('EditList', {id: id})}>
+                                    <View style={{width: 60, height: 24, borderRadius: 16, borderWidth: 1, borderColor: '#fff', backgroundColor: '000000a5', alignItems: 'center', justifyContent: 'center'}}>
+                                        <Text style={{color: '#fff'}}>
+                                            Edit
+                                        </Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        }
+                    />
+                    </View>
+                </Modal>
+
+            </Portal>
         <View style={styles.container}>
             <View style={{width: SCREEN_WIDTH, height:80, justifyContent: 'center', alignItems: 'flex-start'}}>
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
@@ -112,7 +189,7 @@ const List = ({navigation, route}: any) => {
                 </TouchableOpacity>
 
                 <View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={showModal}>
                         <Text style={styles.title}>
                             See Complete List
                         </Text>
@@ -120,6 +197,7 @@ const List = ({navigation, route}: any) => {
                 </View>
             </View>
         </View>
+        </Provider>
     )
 }
 

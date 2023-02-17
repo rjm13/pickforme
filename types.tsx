@@ -1,7 +1,7 @@
 export type RootStackParamList = {
     Root: undefined;
     List: undefined;
-  
+    EditList: undefined;
   };
   
   export type StackParamList = {
