@@ -5,6 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {LinearGradient} from 'expo-linear-gradient';
 import {Portal, Modal, Provider} from 'react-native-paper';
+import uuid from 'react-native-uuid';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -13,7 +14,7 @@ const CreateList = ({navigation} : any) => {
 
     const [didUpdate, setDidUpdate] = useState(false);
 
-    const [activeItem, setActiveItem] = useState(0);
+    const [activeItem, setActiveItem] = useState(-1);
 
     const [listItems, setListItems] = useState([
         // {
@@ -112,7 +113,7 @@ const CreateList = ({navigation} : any) => {
     };
     
 
-    //NameModal
+    //Add Item Modal
     const [visible, setVisible] = useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
@@ -124,7 +125,7 @@ const CreateList = ({navigation} : any) => {
     };
 
     const [itemData, setItemData] = useState({
-        id: activeItem.toString(),
+        id: listItems.length.toString(),
         name: '',
         description: '',
         symbol: '',
@@ -172,34 +173,67 @@ const CreateList = ({navigation} : any) => {
 
     const AddItemToList = () => {
 
-        if (activeItem < listItems.length) {
+        if (activeItem !== -1) {
+            //this function is for updating an existing item
+            console.log('first one ran')
                 let newArray = [...listItems];
-                newArray[activeItem] = {...newArray[activeItem], id: activeItem.toString(), name: itemData.name, description: itemData.description, symbol: itemData.symbol}
+                newArray[activeItem] = {...newArray[activeItem], name: itemData.name, description: itemData.description, symbol: itemData.symbol}
                 setListItems(newArray);
                 hideModal();
                 setDidUpdate(!didUpdate);
         } else {
-            let newData = listItems.concat([itemData]);
+            console.log('2nd one ran' + activeItem)
+            //this function is for adding a new item
+            let newData = listItems.concat([
+                {
+                    id: uuid.v4().toString(),
+                    name: itemData.name,
+                    description: itemData.description,
+                    symbol: itemData.symbol
+                }
+            ]);
             setListItems(newData);
             setDidUpdate(!didUpdate);
+            setItemData({id: uuid.v4().toString(), name: '', description: '', symbol: '',})  
             hideModal(); 
         }
-
-        
     };
 
-    useEffect(() => {
-        setItemData({
-            id: '0',
-            name: '',
-            description: '',
-            symbol: '',
-        })
-    }, [didUpdate])
+    // useEffect(() => {
+    //     if (listItems.length !== 0) {
+    //         const arrObjIds = listItems.map(elements => {
+    //             return +elements.id;
+    //         });
+    //         console.log(arrObjIds)
+    //         let maxid = Math.max(...arrObjIds, 0)
+    //         console.log('maxid is' + maxid)
+    //         //setItemData({id: listItems.length.toString(), name: '', description: '', symbol: '',})
+    //         setItemData({id: maxid + 'test', name: '', description: '', symbol: '',})  
+    //     } 
+    // }, [didUpdate])
+
+    //Remove Item Modal
+    const [visible2, setVisible2] = useState(false);
+    const showRemoveModal = () => setVisible2(true);
+    const hideRemoveModal = () => setVisible2(false);
+    const containerRemoveStyle = {
+        backgroundColor: '#000', 
+        padding: 20,
+        borderRadius: 15,
+    };
 
     const RemoveFromArray = () => {
+        let arr = [...listItems];
 
-    }
+        if (activeItem !== -1) {
+            arr.splice(activeItem, 1);
+            setListItems(arr);
+        };
+
+        hideRemoveModal();
+        hideModal();
+    };
+
 
     return (
         <Provider>
@@ -217,7 +251,7 @@ const CreateList = ({navigation} : any) => {
                                 color='#ff0000'
                                 size={20}
                                 style={{padding: 10}}
-                                onPress={RemoveFromArray}
+                                onPress={showRemoveModal}
                             />
                         </View>
                         <View style={{marginTop: 40, marginBottom: 6, alignSelf: 'flex-start', marginLeft: 20}}>
@@ -269,10 +303,25 @@ const CreateList = ({navigation} : any) => {
                         <TouchableOpacity onPress={AddItemToList}>
                             <View style={{marginTop: 80, marginBottom: 20, borderRadius: 20, backgroundColor: 'purple', width: 160, height: 40, justifyContent: 'center'}}>
                                 <Text style={{color: '#fff', fontSize: 18, fontWeight: '600', textAlign: 'center'}}>
-                                    Add item
+                                    {activeItem === -1 ? 'Add item' : 'Update item'}
                                 </Text>
                             </View>
                         </TouchableOpacity>
+                    </View>
+                </Modal>
+{/* Remove Item from list modal */}
+                <Modal visible={visible2} onDismiss={hideRemoveModal} contentContainerStyle={containerRemoveStyle}>
+                    <View style={{alignItems: 'center'}}>
+                        <Text style={[styles.paragraph, {fontSize: 16}]}>
+                            Remove this item?
+                        </Text>
+                        <TouchableOpacity onPress={RemoveFromArray}>
+                            <View style={{marginVertical: 20, borderRadius: 20, backgroundColor: 'maroon', width: 160, height: 40, justifyContent: 'center'}}>
+                                <Text style={{color: '#fff', fontSize: 18, fontWeight: '600', textAlign: 'center'}}>
+                                    Remove Item
+                                </Text>
+                            </View>
+                        </TouchableOpacity> 
                     </View>
                 </Modal>
             </Portal>
@@ -381,7 +430,7 @@ const CreateList = ({navigation} : any) => {
                                 Items
                             </Text>
                         </View>
-                        <TouchableOpacity onPress={() => {setActiveItem(listItems.length); showModal();}}>
+                        <TouchableOpacity onPress={() => {setActiveItem(-1); showModal();}}>
                             <View style={{alignSelf: 'center', marginTop: 20, justifyContent: 'center', backgroundColor: '#454545a5', width: SCREEN_WIDTH - 40, height: 60, borderRadius: 10, borderColor: 'gray', borderWidth: 1}}>
                                 <Text style={{color: '#fff', textAlign: 'center', fontSize: 18, fontWeight: '400'}}>
                                     + Add Item
