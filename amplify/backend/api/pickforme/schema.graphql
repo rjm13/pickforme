@@ -8,6 +8,8 @@ type User @model @auth(rules: [{ allow: private, operations: [create, delete, up
   theme: String
   lists: [List] @hasMany(indexName: "byUser", fields: "id")
   saved: [List] @hasMany(indexName: "byUser", fields: "id")
+  createdAt: String
+  updatedAt: String
 }
 
 type List @model @auth(rules: [{ allow: private, operations: [create, delete, update, read]}]) {
@@ -17,10 +19,14 @@ type List @model @auth(rules: [{ allow: private, operations: [create, delete, up
     userID: ID @index(name: "byUser", sortKeyFields: ["id"])
     title: String
     privacy: String
-    catgeory: String
+    category: String
     details: String
     imageUri: String
+    color: String
+    numItems: Int
     items: [Item] @hasMany(indexName: "byList", fields: "id")
+    createdAt: String
+    updatedAt: String
 }
 
 type Item @model @auth(rules: [{ allow: private, operations: [create, delete, update, read]}]) {
@@ -29,7 +35,9 @@ type Item @model @auth(rules: [{ allow: private, operations: [create, delete, up
     name: String
     description: String
     symbol: String
-    imnageUri: String
+    imageUri: String
     list: List @hasOne (fields: ["listID"])
     listID: ID @index(name: "byList", sortKeyFields: ["id"])
+    createdAt: String
+    updatedAt: String
 }

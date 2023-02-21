@@ -15,7 +15,7 @@ export const onCreateUser = /* GraphQL */ `
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt
@@ -30,7 +30,7 @@ export const onCreateUser = /* GraphQL */ `
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt
@@ -56,7 +56,7 @@ export const onUpdateUser = /* GraphQL */ `
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt
@@ -71,7 +71,7 @@ export const onUpdateUser = /* GraphQL */ `
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt
@@ -97,7 +97,7 @@ export const onDeleteUser = /* GraphQL */ `
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt
@@ -112,7 +112,7 @@ export const onDeleteUser = /* GraphQL */ `
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt
@@ -146,7 +146,7 @@ export const onCreateList = /* GraphQL */ `
       userID
       title
       privacy
-      catgeory
+      category
       details
       imageUri
       items {
@@ -156,7 +156,7 @@ export const onCreateList = /* GraphQL */ `
           name
           description
           symbol
-          imnageUri
+          imageUri
           listID
           createdAt
           updatedAt
@@ -189,7 +189,7 @@ export const onUpdateList = /* GraphQL */ `
       userID
       title
       privacy
-      catgeory
+      category
       details
       imageUri
       items {
@@ -199,7 +199,7 @@ export const onUpdateList = /* GraphQL */ `
           name
           description
           symbol
-          imnageUri
+          imageUri
           listID
           createdAt
           updatedAt
@@ -232,7 +232,7 @@ export const onDeleteList = /* GraphQL */ `
       userID
       title
       privacy
-      catgeory
+      category
       details
       imageUri
       items {
@@ -242,7 +242,7 @@ export const onDeleteList = /* GraphQL */ `
           name
           description
           symbol
-          imnageUri
+          imageUri
           listID
           createdAt
           updatedAt
@@ -262,7 +262,7 @@ export const onCreateItem = /* GraphQL */ `
       name
       description
       symbol
-      imnageUri
+      imageUri
       list {
         type
         id
@@ -276,7 +276,7 @@ export const onCreateItem = /* GraphQL */ `
         userID
         title
         privacy
-        catgeory
+        category
         details
         imageUri
         items {
@@ -299,7 +299,7 @@ export const onUpdateItem = /* GraphQL */ `
       name
       description
       symbol
-      imnageUri
+      imageUri
       list {
         type
         id
@@ -313,7 +313,7 @@ export const onUpdateItem = /* GraphQL */ `
         userID
         title
         privacy
-        catgeory
+        category
         details
         imageUri
         items {
@@ -336,7 +336,7 @@ export const onDeleteItem = /* GraphQL */ `
       name
       description
       symbol
-      imnageUri
+      imageUri
       list {
         type
         id
@@ -350,7 +350,7 @@ export const onDeleteItem = /* GraphQL */ `
         userID
         title
         privacy
-        catgeory
+        category
         details
         imageUri
         items {

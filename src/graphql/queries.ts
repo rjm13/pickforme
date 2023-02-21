@@ -15,7 +15,7 @@ export const getUser = /* GraphQL */ `
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt
@@ -30,7 +30,7 @@ export const getUser = /* GraphQL */ `
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt
@@ -88,7 +88,7 @@ export const getList = /* GraphQL */ `
       userID
       title
       privacy
-      catgeory
+      category
       details
       imageUri
       items {
@@ -98,7 +98,7 @@ export const getList = /* GraphQL */ `
           name
           description
           symbol
-          imnageUri
+          imageUri
           listID
           createdAt
           updatedAt
@@ -130,7 +130,7 @@ export const listLists = /* GraphQL */ `
         userID
         title
         privacy
-        catgeory
+        category
         details
         imageUri
         items {
@@ -151,7 +151,7 @@ export const getItem = /* GraphQL */ `
       name
       description
       symbol
-      imnageUri
+      imageUri
       list {
         type
         id
@@ -165,7 +165,7 @@ export const getItem = /* GraphQL */ `
         userID
         title
         privacy
-        catgeory
+        category
         details
         imageUri
         items {
@@ -193,14 +193,14 @@ export const listItems = /* GraphQL */ `
         name
         description
         symbol
-        imnageUri
+        imageUri
         list {
           type
           id
           userID
           title
           privacy
-          catgeory
+          category
           details
           imageUri
           createdAt

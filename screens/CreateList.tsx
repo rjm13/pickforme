@@ -10,6 +10,10 @@ import uuid from 'react-native-uuid';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { getUser } from '../src/graphql/queries';
+import { createList } from '../src/graphql/mutations';
+
 const CreateList = ({navigation} : any) => {
 
     const [didUpdate, setDidUpdate] = useState(false);
@@ -24,6 +28,39 @@ const CreateList = ({navigation} : any) => {
         //     symbol: 'diamond',
         // }
     ]);
+
+     //get the user in order to prefill the author's name
+        const MakeList = async () => {
+
+            const userInfo = await Auth.currentAuthenticatedUser();
+            
+            if (!userInfo) {return;}
+
+            try {
+                if (userInfo) {
+                    let response = await API.graphql(graphqlOperation(
+                        createList, {input: {
+                            type: 'List',
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            userID: userInfo.attributes.sub,
+                            title: data.title,
+                            category: data.category,
+                            details: data.details,
+                            privacy: data.privacy,
+                        }}
+                    ));
+                    console.log(response);
+
+                    if (response) {
+                       navigation.navigate('UserLists'); 
+                    }    
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
 
     const Item = ({id, name, description, symbol, index} : any) => {
         return (
@@ -450,11 +487,14 @@ const CreateList = ({navigation} : any) => {
                 start={{ x: 1, y: 0 }}
                 end={{ x: 1, y: 1 }}
             >
-                <View style={{borderRadius: 20, backgroundColor: 'purple', width: 160, height: 40, justifyContent: 'center'}}>
-                    <Text style={{color: '#fff', fontSize: 18, fontWeight: '600', textAlign: 'center'}}>
-                        Create List
-                    </Text>
-                </View>
+                <TouchableOpacity onPress={MakeList}>
+                    <View style={{borderRadius: 20, backgroundColor: 'purple', width: 160, height: 40, justifyContent: 'center'}}>
+                        <Text style={{color: '#fff', fontSize: 18, fontWeight: '600', textAlign: 'center'}}>
+                            Create List
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+                
             </LinearGradient>
         </View>
         </Provider>
