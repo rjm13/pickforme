@@ -2,6 +2,10 @@ export type RootStackParamList = {
     Root: undefined;
     List: undefined;
     EditList: undefined;
+    SignUp: undefined;
+    SignIn: undefined;
+    ForgotPassword: undefined;
+    ForgotPasswordCon: undefined;
   };
   
   export type StackParamList = {

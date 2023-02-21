@@ -17,3 +17,9 @@ export default {
     tabIconSelected: tintColorDark,
   },
 };
+
+export const COLORS = {
+  primary: '#5A1366',
+  primaryTrans: '#5A1366a5',
+  // your colors
+}

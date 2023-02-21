@@ -5,19 +5,52 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Searchbar } from 'react-native-paper';
 
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { getUser } from '../src/graphql/queries';
+import { updateUser } from '../src/graphql/mutations';
+
 import MyLists from '../Components/MyLists';
 import CategoryList from '../Components/CategoryList';
 
 
 const Home = ({navigation}:any) => {
 
+  //search function trigger that refreshes the search results
+      const [didUpdate, setDidUpdate] = useState(false);
+
+  //the current authenticated user object
+    const [user, setUser] = useState()
+    const [authUser, setAuthUser] = useState()
+
+  //when didUpdate is called, pull the user attributes from AWS
+  useEffect(() => {
+    const fetchUser = async () => {
+    
+        const userInfo = await Auth.currentAuthenticatedUser();
+        setAuthUser(userInfo);
+
+        if (!userInfo) {return;}
+
+        try {
+            const userData = await API.graphql(graphqlOperation(
+                getUser, {id: userInfo.attributes.sub}
+            ))
+
+            if (userData) {
+                setUser(userData.data.getUser);
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    fetchUser();
+}, [didUpdate])
+
     const [nextToken, setNextToken] = useState(null)
 
     //search function states
     const [newSearch, setNewSearch] = useState('');
-
-    //search function trigger that refreshes the search results
-    const [didUpdate, setDidUpdate] = useState(false);
 
     
 
@@ -81,7 +114,7 @@ const Home = ({navigation}:any) => {
                     />
                 </View>
 
-                <TouchableOpacity onPress={() => navigation.navigate('CreateList')} style={{margin: 20}}>
+                <TouchableOpacity onPress={() => navigation.navigate(authUser ? 'CreateList' : 'SignIn')} style={{margin: 20}}>
                     <View style={{borderRadius: 6, borderWidth: 1, borderColor: '#fff', backgroundColor: 'transparent'}}>
                         <Text style={{fontWeight: 'bold', color: '#fff', textAlign: 'center', fontSize: 18, paddingHorizontal: 50, paddingVertical: 10}}>
                             + Create a List

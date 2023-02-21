@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "pickforme",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/rjm/pickforme/amplify/backend/api/pickforme/schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authpickformef6297ad1"
+    }
+  }
+}

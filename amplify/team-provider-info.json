@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pickforme-dev-83939-authRole",
+      "UnauthRoleArn": "arn:aws:iam::904548764347:role/amplify-pickforme-dev-83939-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::904548764347:role/amplify-pickforme-dev-83939-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-pickforme-dev-83939-deployment",
+      "UnauthRoleName": "amplify-pickforme-dev-83939-unauthRole",
+      "StackName": "amplify-pickforme-dev-83939",
+      "StackId": "arn:aws:cloudformation:us-east-2:904548764347:stack/amplify-pickforme-dev-83939/6876b1c0-b12c-11ed-8742-0247c80188f6",
+      "AmplifyAppId": "d3rnhi0h92t2cq"
+    },
+    "categories": {
+      "auth": {
+        "pickformef6297ad1": {}
+      },
+      "function": {
+        "autoconfirmemail": {
+          "deploymentBucketName": "amplify-pickforme-dev-83939-deployment",
+          "s3Key": "amplify-builds/autoconfirmemail-58624d70423452785030-build.zip"
+        }
+      }
+    }
+  }
+}

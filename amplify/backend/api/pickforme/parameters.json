@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "pickforme",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authpickformef6297ad1",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

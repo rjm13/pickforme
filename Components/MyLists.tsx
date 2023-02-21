@@ -8,6 +8,9 @@ import {useNavigation} from '@react-navigation/native';
 
 import lists from '../Constants/dummydata'
 
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { getUser } from '../src/graphql/queries';
+import { updateUser } from '../src/graphql/mutations';
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height

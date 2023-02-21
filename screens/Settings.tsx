@@ -20,7 +20,43 @@ import {styles} from '../Components/styles';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { getUser } from '../src/graphql/queries';
+import { updateUser } from '../src/graphql/mutations';
+
 const Settings = ({navigation} : any) => {
+
+    //the current authenticated user object
+    const [user, setUser] = useState()
+    const [authUser, setAuthUser] = useState()
+
+//determines if the user object updated. If it did, pull the info
+    const [update, setDidUpdate] = useState(false);
+
+//when didUpdate is called, pull the user attributes from AWS
+    useEffect(() => {
+        const fetchUser = async () => {
+        
+            const userInfo = await Auth.currentAuthenticatedUser();
+            setAuthUser(userInfo);
+
+            if (!userInfo) {return;}
+
+            try {
+                const userData = await API.graphql(graphqlOperation(
+                    getUser, {id: userInfo.attributes.sub}
+                ))
+
+                if (userData) {
+                    setUser(userData.data.getUser);
+                }
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        fetchUser();
+    }, [update])
 
     return (
         <View style={styles.container}>
@@ -38,6 +74,29 @@ const Settings = ({navigation} : any) => {
                 <View style={{width: 20}}/>
             </View>
             <View>
+                {user ? (
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginVertical: 20}}>
+                        <Text style={[styles.paragraph, {width: '50%'}]}>
+                            Signed in as
+                        </Text>
+                        <Text style={styles.paragraph}>
+                            {authUser.attributes.email.toLowerCase()}
+                        </Text>
+                    </View>
+                ) : (
+                   <TouchableWithoutFeedback onPress={() => navigation.navigate('SignIn')}>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginVertical: 20}}>
+                            <Text style={[styles.paragraph, {width: '50%'}]}>
+                                Sign in
+                            </Text>
+                            <Text style={styles.paragraph}>
+                            
+                            </Text>
+                        </View>
+                    </TouchableWithoutFeedback> 
+                )}
+                
+                
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginVertical: 20}}>
                     <Text style={[styles.paragraph, {width: '50%'}]}>
                         Pick time

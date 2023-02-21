@@ -59,6 +59,19 @@ const styles = StyleSheet.create ({
       color: '#fff',
       fontSize: 18,
       fontWeight: '600'
+    },
+    buttonlayout: {
+        backgroundColor: 'purple',
+        borderRadius: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+        overflow: 'hidden',
+    },
+    buttontext: {
+      fontSize: 16,
+      fontWeight: '800',
+      color: '#fff',
+      textAlign: 'center'
     }
 });
 
