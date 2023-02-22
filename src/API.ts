@@ -66,7 +66,7 @@ export type User = {
   id: string,
   theme?: string | null,
   lists?: ModelListConnection | null,
-  saved?: ModelListConnection | null,
+  saved?: ModelSavedListConnection | null,
   createdAt?: string | null,
   updatedAt?: string | null,
 };
@@ -88,6 +88,8 @@ export type List = {
   category?: string | null,
   details?: string | null,
   imageUri?: string | null,
+  color?: string | null,
+  numItems?: number | null,
   items?: ModelItemConnection | null,
   createdAt?: string | null,
   updatedAt?: string | null,
@@ -113,6 +115,24 @@ export type Item = {
   updatedAt?: string | null,
 };
 
+export type ModelSavedListConnection = {
+  __typename: "ModelSavedListConnection",
+  items:  Array<SavedList | null >,
+  nextToken?: string | null,
+};
+
+export type SavedList = {
+  __typename: "SavedList",
+  id: string,
+  type?: string | null,
+  userID?: string | null,
+  user?: User | null,
+  listID?: string | null,
+  list?: List | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
 export type UpdateUserInput = {
   type?: string | null,
   id: string,
@@ -134,6 +154,8 @@ export type CreateListInput = {
   category?: string | null,
   details?: string | null,
   imageUri?: string | null,
+  color?: string | null,
+  numItems?: number | null,
   createdAt?: string | null,
   updatedAt?: string | null,
 };
@@ -146,6 +168,8 @@ export type ModelListConditionInput = {
   category?: ModelStringInput | null,
   details?: ModelStringInput | null,
   imageUri?: ModelStringInput | null,
+  color?: ModelStringInput | null,
+  numItems?: ModelIntInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelListConditionInput | null > | null,
@@ -169,6 +193,18 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type UpdateListInput = {
   type?: string | null,
   id: string,
@@ -178,6 +214,8 @@ export type UpdateListInput = {
   category?: string | null,
   details?: string | null,
   imageUri?: string | null,
+  color?: string | null,
+  numItems?: number | null,
   createdAt?: string | null,
   updatedAt?: string | null,
 };
@@ -228,6 +266,39 @@ export type DeleteItemInput = {
   id: string,
 };
 
+export type CreateSavedListInput = {
+  id?: string | null,
+  type?: string | null,
+  userID?: string | null,
+  listID?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelSavedListConditionInput = {
+  type?: ModelStringInput | null,
+  userID?: ModelIDInput | null,
+  listID?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelSavedListConditionInput | null > | null,
+  or?: Array< ModelSavedListConditionInput | null > | null,
+  not?: ModelSavedListConditionInput | null,
+};
+
+export type UpdateSavedListInput = {
+  id: string,
+  type?: string | null,
+  userID?: string | null,
+  listID?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type DeleteSavedListInput = {
+  id: string,
+};
+
 export type ModelUserFilterInput = {
   type?: ModelStringInput | null,
   id?: ModelIDInput | null,
@@ -254,6 +325,8 @@ export type ModelListFilterInput = {
   category?: ModelStringInput | null,
   details?: ModelStringInput | null,
   imageUri?: ModelStringInput | null,
+  color?: ModelStringInput | null,
+  numItems?: ModelIntInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelListFilterInput | null > | null,
@@ -275,6 +348,34 @@ export type ModelItemFilterInput = {
   or?: Array< ModelItemFilterInput | null > | null,
   not?: ModelItemFilterInput | null,
 };
+
+export type ModelSavedListFilterInput = {
+  id?: ModelIDInput | null,
+  type?: ModelStringInput | null,
+  userID?: ModelIDInput | null,
+  listID?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelSavedListFilterInput | null > | null,
+  or?: Array< ModelSavedListFilterInput | null > | null,
+  not?: ModelSavedListFilterInput | null,
+};
+
+export type ModelStringKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type CreateUserMutationVariables = {
   input: CreateUserInput,
@@ -299,23 +400,21 @@ export type CreateUserMutation = {
         category?: string | null,
         details?: string | null,
         imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     saved?:  {
-      __typename: "ModelListConnection",
+      __typename: "ModelSavedListConnection",
       items:  Array< {
-        __typename: "List",
-        type?: string | null,
+        __typename: "SavedList",
         id: string,
+        type?: string | null,
         userID?: string | null,
-        title?: string | null,
-        privacy?: string | null,
-        category?: string | null,
-        details?: string | null,
-        imageUri?: string | null,
+        listID?: string | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
@@ -349,23 +448,21 @@ export type UpdateUserMutation = {
         category?: string | null,
         details?: string | null,
         imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     saved?:  {
-      __typename: "ModelListConnection",
+      __typename: "ModelSavedListConnection",
       items:  Array< {
-        __typename: "List",
-        type?: string | null,
+        __typename: "SavedList",
         id: string,
+        type?: string | null,
         userID?: string | null,
-        title?: string | null,
-        privacy?: string | null,
-        category?: string | null,
-        details?: string | null,
-        imageUri?: string | null,
+        listID?: string | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
@@ -399,23 +496,21 @@ export type DeleteUserMutation = {
         category?: string | null,
         details?: string | null,
         imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     saved?:  {
-      __typename: "ModelListConnection",
+      __typename: "ModelSavedListConnection",
       items:  Array< {
-        __typename: "List",
-        type?: string | null,
+        __typename: "SavedList",
         id: string,
+        type?: string | null,
         userID?: string | null,
-        title?: string | null,
-        privacy?: string | null,
-        category?: string | null,
-        details?: string | null,
-        imageUri?: string | null,
+        listID?: string | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
@@ -446,7 +541,7 @@ export type CreateListMutation = {
         nextToken?: string | null,
       } | null,
       saved?:  {
-        __typename: "ModelListConnection",
+        __typename: "ModelSavedListConnection",
         nextToken?: string | null,
       } | null,
       createdAt?: string | null,
@@ -458,6 +553,8 @@ export type CreateListMutation = {
     category?: string | null,
     details?: string | null,
     imageUri?: string | null,
+    color?: string | null,
+    numItems?: number | null,
     items?:  {
       __typename: "ModelItemConnection",
       items:  Array< {
@@ -499,7 +596,7 @@ export type UpdateListMutation = {
         nextToken?: string | null,
       } | null,
       saved?:  {
-        __typename: "ModelListConnection",
+        __typename: "ModelSavedListConnection",
         nextToken?: string | null,
       } | null,
       createdAt?: string | null,
@@ -511,6 +608,8 @@ export type UpdateListMutation = {
     category?: string | null,
     details?: string | null,
     imageUri?: string | null,
+    color?: string | null,
+    numItems?: number | null,
     items?:  {
       __typename: "ModelItemConnection",
       items:  Array< {
@@ -552,7 +651,7 @@ export type DeleteListMutation = {
         nextToken?: string | null,
       } | null,
       saved?:  {
-        __typename: "ModelListConnection",
+        __typename: "ModelSavedListConnection",
         nextToken?: string | null,
       } | null,
       createdAt?: string | null,
@@ -564,6 +663,8 @@ export type DeleteListMutation = {
     category?: string | null,
     details?: string | null,
     imageUri?: string | null,
+    color?: string | null,
+    numItems?: number | null,
     items?:  {
       __typename: "ModelItemConnection",
       items:  Array< {
@@ -617,6 +718,8 @@ export type CreateItemMutation = {
       category?: string | null,
       details?: string | null,
       imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
       items?:  {
         __typename: "ModelItemConnection",
         nextToken?: string | null,
@@ -662,6 +765,8 @@ export type UpdateItemMutation = {
       category?: string | null,
       details?: string | null,
       imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
       items?:  {
         __typename: "ModelItemConnection",
         nextToken?: string | null,
@@ -707,6 +812,8 @@ export type DeleteItemMutation = {
       category?: string | null,
       details?: string | null,
       imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
       items?:  {
         __typename: "ModelItemConnection",
         nextToken?: string | null,
@@ -715,6 +822,186 @@ export type DeleteItemMutation = {
       updatedAt?: string | null,
     } | null,
     listID?: string | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+  } | null,
+};
+
+export type CreateSavedListMutationVariables = {
+  input: CreateSavedListInput,
+  condition?: ModelSavedListConditionInput | null,
+};
+
+export type CreateSavedListMutation = {
+  createSavedList?:  {
+    __typename: "SavedList",
+    id: string,
+    type?: string | null,
+    userID?: string | null,
+    user?:  {
+      __typename: "User",
+      type?: string | null,
+      id: string,
+      theme?: string | null,
+      lists?:  {
+        __typename: "ModelListConnection",
+        nextToken?: string | null,
+      } | null,
+      saved?:  {
+        __typename: "ModelSavedListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    listID?: string | null,
+    list?:  {
+      __typename: "List",
+      type?: string | null,
+      id: string,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      userID?: string | null,
+      title?: string | null,
+      privacy?: string | null,
+      category?: string | null,
+      details?: string | null,
+      imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
+      items?:  {
+        __typename: "ModelItemConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+  } | null,
+};
+
+export type UpdateSavedListMutationVariables = {
+  input: UpdateSavedListInput,
+  condition?: ModelSavedListConditionInput | null,
+};
+
+export type UpdateSavedListMutation = {
+  updateSavedList?:  {
+    __typename: "SavedList",
+    id: string,
+    type?: string | null,
+    userID?: string | null,
+    user?:  {
+      __typename: "User",
+      type?: string | null,
+      id: string,
+      theme?: string | null,
+      lists?:  {
+        __typename: "ModelListConnection",
+        nextToken?: string | null,
+      } | null,
+      saved?:  {
+        __typename: "ModelSavedListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    listID?: string | null,
+    list?:  {
+      __typename: "List",
+      type?: string | null,
+      id: string,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      userID?: string | null,
+      title?: string | null,
+      privacy?: string | null,
+      category?: string | null,
+      details?: string | null,
+      imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
+      items?:  {
+        __typename: "ModelItemConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+  } | null,
+};
+
+export type DeleteSavedListMutationVariables = {
+  input: DeleteSavedListInput,
+  condition?: ModelSavedListConditionInput | null,
+};
+
+export type DeleteSavedListMutation = {
+  deleteSavedList?:  {
+    __typename: "SavedList",
+    id: string,
+    type?: string | null,
+    userID?: string | null,
+    user?:  {
+      __typename: "User",
+      type?: string | null,
+      id: string,
+      theme?: string | null,
+      lists?:  {
+        __typename: "ModelListConnection",
+        nextToken?: string | null,
+      } | null,
+      saved?:  {
+        __typename: "ModelSavedListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    listID?: string | null,
+    list?:  {
+      __typename: "List",
+      type?: string | null,
+      id: string,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      userID?: string | null,
+      title?: string | null,
+      privacy?: string | null,
+      category?: string | null,
+      details?: string | null,
+      imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
+      items?:  {
+        __typename: "ModelItemConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
     createdAt?: string | null,
     updatedAt?: string | null,
   } | null,
@@ -742,23 +1029,21 @@ export type GetUserQuery = {
         category?: string | null,
         details?: string | null,
         imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     saved?:  {
-      __typename: "ModelListConnection",
+      __typename: "ModelSavedListConnection",
       items:  Array< {
-        __typename: "List",
-        type?: string | null,
+        __typename: "SavedList",
         id: string,
+        type?: string | null,
         userID?: string | null,
-        title?: string | null,
-        privacy?: string | null,
-        category?: string | null,
-        details?: string | null,
-        imageUri?: string | null,
+        listID?: string | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
@@ -788,7 +1073,7 @@ export type ListUsersQuery = {
         nextToken?: string | null,
       } | null,
       saved?:  {
-        __typename: "ModelListConnection",
+        __typename: "ModelSavedListConnection",
         nextToken?: string | null,
       } | null,
       createdAt?: string | null,
@@ -817,7 +1102,7 @@ export type GetListQuery = {
         nextToken?: string | null,
       } | null,
       saved?:  {
-        __typename: "ModelListConnection",
+        __typename: "ModelSavedListConnection",
         nextToken?: string | null,
       } | null,
       createdAt?: string | null,
@@ -829,6 +1114,8 @@ export type GetListQuery = {
     category?: string | null,
     details?: string | null,
     imageUri?: string | null,
+    color?: string | null,
+    numItems?: number | null,
     items?:  {
       __typename: "ModelItemConnection",
       items:  Array< {
@@ -877,6 +1164,8 @@ export type ListListsQuery = {
       category?: string | null,
       details?: string | null,
       imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
       items?:  {
         __typename: "ModelItemConnection",
         nextToken?: string | null,
@@ -919,6 +1208,8 @@ export type GetItemQuery = {
       category?: string | null,
       details?: string | null,
       imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
       items?:  {
         __typename: "ModelItemConnection",
         nextToken?: string | null,
@@ -959,10 +1250,164 @@ export type ListItemsQuery = {
         category?: string | null,
         details?: string | null,
         imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null,
       listID?: string | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetSavedListQueryVariables = {
+  id: string,
+};
+
+export type GetSavedListQuery = {
+  getSavedList?:  {
+    __typename: "SavedList",
+    id: string,
+    type?: string | null,
+    userID?: string | null,
+    user?:  {
+      __typename: "User",
+      type?: string | null,
+      id: string,
+      theme?: string | null,
+      lists?:  {
+        __typename: "ModelListConnection",
+        nextToken?: string | null,
+      } | null,
+      saved?:  {
+        __typename: "ModelSavedListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    listID?: string | null,
+    list?:  {
+      __typename: "List",
+      type?: string | null,
+      id: string,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      userID?: string | null,
+      title?: string | null,
+      privacy?: string | null,
+      category?: string | null,
+      details?: string | null,
+      imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
+      items?:  {
+        __typename: "ModelItemConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+  } | null,
+};
+
+export type ListSavedListsQueryVariables = {
+  filter?: ModelSavedListFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListSavedListsQuery = {
+  listSavedLists?:  {
+    __typename: "ModelSavedListConnection",
+    items:  Array< {
+      __typename: "SavedList",
+      id: string,
+      type?: string | null,
+      userID?: string | null,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      listID?: string | null,
+      list?:  {
+        __typename: "List",
+        type?: string | null,
+        id: string,
+        userID?: string | null,
+        title?: string | null,
+        privacy?: string | null,
+        category?: string | null,
+        details?: string | null,
+        imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type SavedListByDateQueryVariables = {
+  type: string,
+  createdAt?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelSavedListFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type SavedListByDateQuery = {
+  savedListByDate?:  {
+    __typename: "ModelSavedListConnection",
+    items:  Array< {
+      __typename: "SavedList",
+      id: string,
+      type?: string | null,
+      userID?: string | null,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      listID?: string | null,
+      list?:  {
+        __typename: "List",
+        type?: string | null,
+        id: string,
+        userID?: string | null,
+        title?: string | null,
+        privacy?: string | null,
+        category?: string | null,
+        details?: string | null,
+        imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
       createdAt?: string | null,
       updatedAt?: string | null,
     } | null >,
@@ -988,23 +1433,21 @@ export type OnCreateUserSubscription = {
         category?: string | null,
         details?: string | null,
         imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     saved?:  {
-      __typename: "ModelListConnection",
+      __typename: "ModelSavedListConnection",
       items:  Array< {
-        __typename: "List",
-        type?: string | null,
+        __typename: "SavedList",
         id: string,
+        type?: string | null,
         userID?: string | null,
-        title?: string | null,
-        privacy?: string | null,
-        category?: string | null,
-        details?: string | null,
-        imageUri?: string | null,
+        listID?: string | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
@@ -1033,23 +1476,21 @@ export type OnUpdateUserSubscription = {
         category?: string | null,
         details?: string | null,
         imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     saved?:  {
-      __typename: "ModelListConnection",
+      __typename: "ModelSavedListConnection",
       items:  Array< {
-        __typename: "List",
-        type?: string | null,
+        __typename: "SavedList",
         id: string,
+        type?: string | null,
         userID?: string | null,
-        title?: string | null,
-        privacy?: string | null,
-        category?: string | null,
-        details?: string | null,
-        imageUri?: string | null,
+        listID?: string | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
@@ -1078,23 +1519,21 @@ export type OnDeleteUserSubscription = {
         category?: string | null,
         details?: string | null,
         imageUri?: string | null,
+        color?: string | null,
+        numItems?: number | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     saved?:  {
-      __typename: "ModelListConnection",
+      __typename: "ModelSavedListConnection",
       items:  Array< {
-        __typename: "List",
-        type?: string | null,
+        __typename: "SavedList",
         id: string,
+        type?: string | null,
         userID?: string | null,
-        title?: string | null,
-        privacy?: string | null,
-        category?: string | null,
-        details?: string | null,
-        imageUri?: string | null,
+        listID?: string | null,
         createdAt?: string | null,
         updatedAt?: string | null,
       } | null >,
@@ -1120,7 +1559,7 @@ export type OnCreateListSubscription = {
         nextToken?: string | null,
       } | null,
       saved?:  {
-        __typename: "ModelListConnection",
+        __typename: "ModelSavedListConnection",
         nextToken?: string | null,
       } | null,
       createdAt?: string | null,
@@ -1132,6 +1571,8 @@ export type OnCreateListSubscription = {
     category?: string | null,
     details?: string | null,
     imageUri?: string | null,
+    color?: string | null,
+    numItems?: number | null,
     items?:  {
       __typename: "ModelItemConnection",
       items:  Array< {
@@ -1168,7 +1609,7 @@ export type OnUpdateListSubscription = {
         nextToken?: string | null,
       } | null,
       saved?:  {
-        __typename: "ModelListConnection",
+        __typename: "ModelSavedListConnection",
         nextToken?: string | null,
       } | null,
       createdAt?: string | null,
@@ -1180,6 +1621,8 @@ export type OnUpdateListSubscription = {
     category?: string | null,
     details?: string | null,
     imageUri?: string | null,
+    color?: string | null,
+    numItems?: number | null,
     items?:  {
       __typename: "ModelItemConnection",
       items:  Array< {
@@ -1216,7 +1659,7 @@ export type OnDeleteListSubscription = {
         nextToken?: string | null,
       } | null,
       saved?:  {
-        __typename: "ModelListConnection",
+        __typename: "ModelSavedListConnection",
         nextToken?: string | null,
       } | null,
       createdAt?: string | null,
@@ -1228,6 +1671,8 @@ export type OnDeleteListSubscription = {
     category?: string | null,
     details?: string | null,
     imageUri?: string | null,
+    color?: string | null,
+    numItems?: number | null,
     items?:  {
       __typename: "ModelItemConnection",
       items:  Array< {
@@ -1276,6 +1721,8 @@ export type OnCreateItemSubscription = {
       category?: string | null,
       details?: string | null,
       imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
       items?:  {
         __typename: "ModelItemConnection",
         nextToken?: string | null,
@@ -1316,6 +1763,8 @@ export type OnUpdateItemSubscription = {
       category?: string | null,
       details?: string | null,
       imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
       items?:  {
         __typename: "ModelItemConnection",
         nextToken?: string | null,
@@ -1356,6 +1805,8 @@ export type OnDeleteItemSubscription = {
       category?: string | null,
       details?: string | null,
       imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
       items?:  {
         __typename: "ModelItemConnection",
         nextToken?: string | null,
@@ -1364,6 +1815,171 @@ export type OnDeleteItemSubscription = {
       updatedAt?: string | null,
     } | null,
     listID?: string | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+  } | null,
+};
+
+export type OnCreateSavedListSubscription = {
+  onCreateSavedList?:  {
+    __typename: "SavedList",
+    id: string,
+    type?: string | null,
+    userID?: string | null,
+    user?:  {
+      __typename: "User",
+      type?: string | null,
+      id: string,
+      theme?: string | null,
+      lists?:  {
+        __typename: "ModelListConnection",
+        nextToken?: string | null,
+      } | null,
+      saved?:  {
+        __typename: "ModelSavedListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    listID?: string | null,
+    list?:  {
+      __typename: "List",
+      type?: string | null,
+      id: string,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      userID?: string | null,
+      title?: string | null,
+      privacy?: string | null,
+      category?: string | null,
+      details?: string | null,
+      imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
+      items?:  {
+        __typename: "ModelItemConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+  } | null,
+};
+
+export type OnUpdateSavedListSubscription = {
+  onUpdateSavedList?:  {
+    __typename: "SavedList",
+    id: string,
+    type?: string | null,
+    userID?: string | null,
+    user?:  {
+      __typename: "User",
+      type?: string | null,
+      id: string,
+      theme?: string | null,
+      lists?:  {
+        __typename: "ModelListConnection",
+        nextToken?: string | null,
+      } | null,
+      saved?:  {
+        __typename: "ModelSavedListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    listID?: string | null,
+    list?:  {
+      __typename: "List",
+      type?: string | null,
+      id: string,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      userID?: string | null,
+      title?: string | null,
+      privacy?: string | null,
+      category?: string | null,
+      details?: string | null,
+      imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
+      items?:  {
+        __typename: "ModelItemConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+  } | null,
+};
+
+export type OnDeleteSavedListSubscription = {
+  onDeleteSavedList?:  {
+    __typename: "SavedList",
+    id: string,
+    type?: string | null,
+    userID?: string | null,
+    user?:  {
+      __typename: "User",
+      type?: string | null,
+      id: string,
+      theme?: string | null,
+      lists?:  {
+        __typename: "ModelListConnection",
+        nextToken?: string | null,
+      } | null,
+      saved?:  {
+        __typename: "ModelSavedListConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
+    listID?: string | null,
+    list?:  {
+      __typename: "List",
+      type?: string | null,
+      id: string,
+      user?:  {
+        __typename: "User",
+        type?: string | null,
+        id: string,
+        theme?: string | null,
+        createdAt?: string | null,
+        updatedAt?: string | null,
+      } | null,
+      userID?: string | null,
+      title?: string | null,
+      privacy?: string | null,
+      category?: string | null,
+      details?: string | null,
+      imageUri?: string | null,
+      color?: string | null,
+      numItems?: number | null,
+      items?:  {
+        __typename: "ModelItemConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } | null,
     createdAt?: string | null,
     updatedAt?: string | null,
   } | null,

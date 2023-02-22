@@ -21,6 +21,8 @@ export const createUser = /* GraphQL */ `
           category
           details
           imageUri
+          color
+          numItems
           createdAt
           updatedAt
         }
@@ -28,14 +30,10 @@ export const createUser = /* GraphQL */ `
       }
       saved {
         items {
-          type
           id
+          type
           userID
-          title
-          privacy
-          category
-          details
-          imageUri
+          listID
           createdAt
           updatedAt
         }
@@ -65,6 +63,8 @@ export const updateUser = /* GraphQL */ `
           category
           details
           imageUri
+          color
+          numItems
           createdAt
           updatedAt
         }
@@ -72,14 +72,10 @@ export const updateUser = /* GraphQL */ `
       }
       saved {
         items {
-          type
           id
+          type
           userID
-          title
-          privacy
-          category
-          details
-          imageUri
+          listID
           createdAt
           updatedAt
         }
@@ -109,6 +105,8 @@ export const deleteUser = /* GraphQL */ `
           category
           details
           imageUri
+          color
+          numItems
           createdAt
           updatedAt
         }
@@ -116,14 +114,10 @@ export const deleteUser = /* GraphQL */ `
       }
       saved {
         items {
-          type
           id
+          type
           userID
-          title
-          privacy
-          category
-          details
-          imageUri
+          listID
           createdAt
           updatedAt
         }
@@ -161,6 +155,8 @@ export const createList = /* GraphQL */ `
       category
       details
       imageUri
+      color
+      numItems
       items {
         items {
           type
@@ -207,6 +203,8 @@ export const updateList = /* GraphQL */ `
       category
       details
       imageUri
+      color
+      numItems
       items {
         items {
           type
@@ -253,6 +251,8 @@ export const deleteList = /* GraphQL */ `
       category
       details
       imageUri
+      color
+      numItems
       items {
         items {
           type
@@ -300,6 +300,8 @@ export const createItem = /* GraphQL */ `
         category
         details
         imageUri
+        color
+        numItems
         items {
           nextToken
         }
@@ -340,6 +342,8 @@ export const updateItem = /* GraphQL */ `
         category
         details
         imageUri
+        color
+        numItems
         items {
           nextToken
         }
@@ -380,6 +384,8 @@ export const deleteItem = /* GraphQL */ `
         category
         details
         imageUri
+        color
+        numItems
         items {
           nextToken
         }
@@ -387,6 +393,162 @@ export const deleteItem = /* GraphQL */ `
         updatedAt
       }
       listID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createSavedList = /* GraphQL */ `
+  mutation CreateSavedList(
+    $input: CreateSavedListInput!
+    $condition: ModelSavedListConditionInput
+  ) {
+    createSavedList(input: $input, condition: $condition) {
+      id
+      type
+      userID
+      user {
+        type
+        id
+        theme
+        lists {
+          nextToken
+        }
+        saved {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      listID
+      list {
+        type
+        id
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        userID
+        title
+        privacy
+        category
+        details
+        imageUri
+        color
+        numItems
+        items {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateSavedList = /* GraphQL */ `
+  mutation UpdateSavedList(
+    $input: UpdateSavedListInput!
+    $condition: ModelSavedListConditionInput
+  ) {
+    updateSavedList(input: $input, condition: $condition) {
+      id
+      type
+      userID
+      user {
+        type
+        id
+        theme
+        lists {
+          nextToken
+        }
+        saved {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      listID
+      list {
+        type
+        id
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        userID
+        title
+        privacy
+        category
+        details
+        imageUri
+        color
+        numItems
+        items {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteSavedList = /* GraphQL */ `
+  mutation DeleteSavedList(
+    $input: DeleteSavedListInput!
+    $condition: ModelSavedListConditionInput
+  ) {
+    deleteSavedList(input: $input, condition: $condition) {
+      id
+      type
+      userID
+      user {
+        type
+        id
+        theme
+        lists {
+          nextToken
+        }
+        saved {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      listID
+      list {
+        type
+        id
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        userID
+        title
+        privacy
+        category
+        details
+        imageUri
+        color
+        numItems
+        items {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

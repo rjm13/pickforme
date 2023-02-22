@@ -7,7 +7,7 @@ type User @model @auth(rules: [{ allow: private, operations: [create, delete, up
   id: ID!
   theme: String
   lists: [List] @hasMany(indexName: "byUser", fields: "id")
-  saved: [List] @hasMany(indexName: "byUser", fields: "id")
+  saved: [SavedList] @hasMany(indexName: "byUser", fields: "id")
   createdAt: String
   updatedAt: String
 }
@@ -40,4 +40,16 @@ type Item @model @auth(rules: [{ allow: private, operations: [create, delete, up
     listID: ID @index(name: "byList", sortKeyFields: ["id"])
     createdAt: String
     updatedAt: String
+}
+
+type SavedList @model @auth( rules: [{ allow: private, operations: [create, delete, update, read]}])
+{
+  id: ID!
+  type: String @index(name: "savedListByDate", queryField: "savedListByDate", sortKeyFields: ["createdAt"])
+  userID: ID @index(name: "byUser", sortKeyFields: ["listID"])
+  user: User @hasOne (fields: ["userID"])
+  listID: ID
+  list: List @hasOne (fields: ["listID"])
+  createdAt: String
+  updatedAt: String
 }

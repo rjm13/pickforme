@@ -18,6 +18,8 @@ export const onCreateUser = /* GraphQL */ `
           category
           details
           imageUri
+          color
+          numItems
           createdAt
           updatedAt
         }
@@ -25,14 +27,10 @@ export const onCreateUser = /* GraphQL */ `
       }
       saved {
         items {
-          type
           id
+          type
           userID
-          title
-          privacy
-          category
-          details
-          imageUri
+          listID
           createdAt
           updatedAt
         }
@@ -59,6 +57,8 @@ export const onUpdateUser = /* GraphQL */ `
           category
           details
           imageUri
+          color
+          numItems
           createdAt
           updatedAt
         }
@@ -66,14 +66,10 @@ export const onUpdateUser = /* GraphQL */ `
       }
       saved {
         items {
-          type
           id
+          type
           userID
-          title
-          privacy
-          category
-          details
-          imageUri
+          listID
           createdAt
           updatedAt
         }
@@ -100,6 +96,8 @@ export const onDeleteUser = /* GraphQL */ `
           category
           details
           imageUri
+          color
+          numItems
           createdAt
           updatedAt
         }
@@ -107,14 +105,10 @@ export const onDeleteUser = /* GraphQL */ `
       }
       saved {
         items {
-          type
           id
+          type
           userID
-          title
-          privacy
-          category
-          details
-          imageUri
+          listID
           createdAt
           updatedAt
         }
@@ -149,6 +143,8 @@ export const onCreateList = /* GraphQL */ `
       category
       details
       imageUri
+      color
+      numItems
       items {
         items {
           type
@@ -192,6 +188,8 @@ export const onUpdateList = /* GraphQL */ `
       category
       details
       imageUri
+      color
+      numItems
       items {
         items {
           type
@@ -235,6 +233,8 @@ export const onDeleteList = /* GraphQL */ `
       category
       details
       imageUri
+      color
+      numItems
       items {
         items {
           type
@@ -279,6 +279,8 @@ export const onCreateItem = /* GraphQL */ `
         category
         details
         imageUri
+        color
+        numItems
         items {
           nextToken
         }
@@ -316,6 +318,8 @@ export const onUpdateItem = /* GraphQL */ `
         category
         details
         imageUri
+        color
+        numItems
         items {
           nextToken
         }
@@ -353,6 +357,8 @@ export const onDeleteItem = /* GraphQL */ `
         category
         details
         imageUri
+        color
+        numItems
         items {
           nextToken
         }
@@ -360,6 +366,153 @@ export const onDeleteItem = /* GraphQL */ `
         updatedAt
       }
       listID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateSavedList = /* GraphQL */ `
+  subscription OnCreateSavedList {
+    onCreateSavedList {
+      id
+      type
+      userID
+      user {
+        type
+        id
+        theme
+        lists {
+          nextToken
+        }
+        saved {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      listID
+      list {
+        type
+        id
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        userID
+        title
+        privacy
+        category
+        details
+        imageUri
+        color
+        numItems
+        items {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateSavedList = /* GraphQL */ `
+  subscription OnUpdateSavedList {
+    onUpdateSavedList {
+      id
+      type
+      userID
+      user {
+        type
+        id
+        theme
+        lists {
+          nextToken
+        }
+        saved {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      listID
+      list {
+        type
+        id
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        userID
+        title
+        privacy
+        category
+        details
+        imageUri
+        color
+        numItems
+        items {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteSavedList = /* GraphQL */ `
+  subscription OnDeleteSavedList {
+    onDeleteSavedList {
+      id
+      type
+      userID
+      user {
+        type
+        id
+        theme
+        lists {
+          nextToken
+        }
+        saved {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      listID
+      list {
+        type
+        id
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        userID
+        title
+        privacy
+        category
+        details
+        imageUri
+        color
+        numItems
+        items {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

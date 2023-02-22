@@ -18,6 +18,8 @@ export const getUser = /* GraphQL */ `
           category
           details
           imageUri
+          color
+          numItems
           createdAt
           updatedAt
         }
@@ -25,14 +27,19 @@ export const getUser = /* GraphQL */ `
       }
       saved {
         items {
-          type
           id
+          type
           userID
-          title
-          privacy
-          category
-          details
-          imageUri
+          listID
+          list {
+            id
+            title
+            category
+            createdAt
+            updatedAt
+            details
+            privacy
+          }
           createdAt
           updatedAt
         }
@@ -91,6 +98,8 @@ export const getList = /* GraphQL */ `
       category
       details
       imageUri
+      color
+      numItems
       items {
         items {
           type
@@ -133,6 +142,8 @@ export const listLists = /* GraphQL */ `
         category
         details
         imageUri
+        color
+        numItems
         items {
           nextToken
         }
@@ -168,6 +179,8 @@ export const getItem = /* GraphQL */ `
         category
         details
         imageUri
+        color
+        numItems
         items {
           nextToken
         }
@@ -203,10 +216,151 @@ export const listItems = /* GraphQL */ `
           category
           details
           imageUri
+          color
+          numItems
           createdAt
           updatedAt
         }
         listID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getSavedList = /* GraphQL */ `
+  query GetSavedList($id: ID!) {
+    getSavedList(id: $id) {
+      id
+      type
+      userID
+      user {
+        type
+        id
+        theme
+        lists {
+          nextToken
+        }
+        saved {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      listID
+      list {
+        type
+        id
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        userID
+        title
+        privacy
+        category
+        details
+        imageUri
+        color
+        numItems
+        items {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listSavedLists = /* GraphQL */ `
+  query ListSavedLists(
+    $filter: ModelSavedListFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSavedLists(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        type
+        userID
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        listID
+        list {
+          type
+          id
+          userID
+          title
+          privacy
+          category
+          details
+          imageUri
+          color
+          numItems
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const savedListByDate = /* GraphQL */ `
+  query SavedListByDate(
+    $type: String!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSavedListFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    savedListByDate(
+      type: $type
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        type
+        userID
+        user {
+          type
+          id
+          theme
+          createdAt
+          updatedAt
+        }
+        listID
+        list {
+          type
+          id
+          userID
+          title
+          privacy
+          category
+          details
+          imageUri
+          color
+          numItems
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }

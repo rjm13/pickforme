@@ -17,10 +17,11 @@ import { listLists, getUser } from '../src/graphql/queries';
 import { updateUser } from '../src/graphql/mutations';
 
 import {styles} from '../Components/styles';
-//import lists from '../Constants/dummydata';
+import SavedList from '../Components/SavedList';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import SavedLists from '../Components/SavedList';
 
 
 const UserLists = ({navigation}:any) => {
@@ -249,7 +250,7 @@ const UserLists = ({navigation}:any) => {
                             />
                         </View>
                     ) : SelectedId === 3 ? (
-                        <View />
+                        <SavedList />
                     ) : null}
                 </View>
             </View>

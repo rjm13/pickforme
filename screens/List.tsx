@@ -15,7 +15,11 @@ import {
 import {Portal, Modal, Provider} from 'react-native-paper';
 
 import {styles} from '../Components/styles';
-import lists from '../Constants/dummydata';
+
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { getList, getSavedList, getUser } from '../src/graphql/queries';
+import { createSavedList, deleteSavedList } from '../src/graphql/mutations';
+//import lists from '../Constants/dummydata';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -27,6 +31,8 @@ const List = ({navigation, route}: any) => {
 
     const { id } = route.params;
 
+    const [saveID, setSaveID] = useState('')
+
     const [listItems, setListItems] = useState([{
         id: '',
         name: '',
@@ -36,27 +42,26 @@ const List = ({navigation, route}: any) => {
 
     const [picked, setPicked] = useState(false);
 
-    const [list, setList] = useState({
-        id: '',
-        title: '',
-        category: '',
-        privacy: '',
-        symbol: '',
-        detail: '',
-        color: '',
-        numItems: 0,
-        createdAt: '',
-        updatedAt: '',
-        items: [{}]
-    })
+    const [list, setList] = useState({});
+
+    const [isSaved, setIsSaved] = useState(false);
 
     //get the List items
     useEffect(() => {
+        const fetchList = async () => {
+            try {
+                const listData = await API.graphql(graphqlOperation(
+                    getList, {id: id}
+                ))
+                setList(listData.data.getList); 
+            } catch (e) {
+            console.log(e);
+          }
+        }
 
-        let numId = +id - 1
-
-        setListItems(lists[numId].items);
-        setList(lists[numId]);
+        fetchList();
+        
+        setListItems([]);
     }, [id])
 
     function getRandomInt(max : any) {
@@ -105,6 +110,78 @@ const List = ({navigation, route}: any) => {
             symbol={item.symbol}
         />
       );
+
+    //on render, determine if the list in alraedy saved or not
+    useEffect(() => {
+        const fetchSavedList = async () => {
+
+            const userInfo = await Auth.currentAuthenticatedUser();
+
+            try {
+                let userData = await API.graphql(graphqlOperation(
+                    getUser, {id: userInfo.attributes.sub
+                    }
+                ))
+
+                for (let i = 0; i < userData.data.getUser.saved.items.length; i++) {
+                    if (userData.data.getUser.saved.items[i].listID === id) {
+                        setIsSaved(true);
+                        setSaveID(userData.data.getUser.saved.items[i].id)
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchSavedList();
+    }, [])
+
+    const SaveList = async ({id} : any) => {
+
+        let userInfo = await Auth.currentAuthenticatedUser();
+
+        let createList = await API.graphql(graphqlOperation(
+            createSavedList, {input: {
+                userID: userInfo.attributes.sub, 
+                listID: id,
+                type: "SavedList",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            }}
+        ))
+        setSaveID(createList.data.createSavedList.id)
+        console.log(createList)
+    }
+
+    const UnSaveList = async ({id} : any) => {
+
+        let userInfo = await Auth.currentAuthenticatedUser();
+
+        let getAList = await API.graphql(graphqlOperation(
+            getSavedList, {
+                id: saveID
+            }
+        ))
+        console.log(getAList)
+        
+        let connectionID = getAList.data.getSavedList.id
+
+        let deleteConnection = await API.graphql(graphqlOperation(
+            deleteSavedList, {input: {"id": connectionID}}
+        ))
+        console.log(deleteConnection)
+    }
+
+    const onSavePress = () => {
+        if ( isSaved === false ) {
+            setIsSaved(true);
+            SaveList({id: id})
+        }
+        if ( isSaved === true ) {
+            setIsSaved(false);
+            UnSaveList({id: id});
+        }  
+    };
     
     return (
         <Provider>
@@ -140,7 +217,7 @@ const List = ({navigation, route}: any) => {
 
             </Portal>
         <View style={styles.container}>
-            <View style={{width: SCREEN_WIDTH, height:80, justifyContent: 'center', alignItems: 'flex-start'}}>
+            <View style={{width: SCREEN_WIDTH, height:80, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row'}}>
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <FontAwesome 
                         name='close'
@@ -149,6 +226,15 @@ const List = ({navigation, route}: any) => {
                         style={{padding: 20}}
                     />
                 </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={onSavePress}>
+                    <FontAwesome 
+                        name={isSaved === true ? 'bookmark' : 'bookmark-o'}
+                        color={isSaved === true ? 'gold' : '#fff'}
+                        size={20}
+                        style={{padding: 20}}
+                    />
+                </TouchableWithoutFeedback>
+
             </View>
             <View style={{alignItems: 'center', justifyContent: 'space-between', height: SCREEN_HEIGHT-200}}>
                 <View>
@@ -159,15 +245,15 @@ const List = ({navigation, route}: any) => {
                     <View style={{marginVertical: 40, paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between', width: SCREEN_WIDTH - 40}}>
                         <View>
                             <Text style={{color: '#fff'}}>
-                                {list.numItems} items
+                                {listItems.length} items
                             </Text>
                             <Text style={{color: '#fff', textTransform: 'capitalize'}}>
-                                {list.privacy}
+                                {list?.privacy}
                             </Text>
                         </View>
                         <View>
                             <Text style={{color: '#fff', textTransform: 'capitalize'}}>
-                                {list.category}
+                                {list?.category}
                             </Text>
                         </View>
                     </View>
