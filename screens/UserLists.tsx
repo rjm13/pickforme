@@ -93,7 +93,7 @@ const UserLists = ({navigation}:any) => {
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-    const Item = ({id, title, categoryID, privacy, symbol, details} : any) => {
+    const Item = ({id, title, category, privacy, symbol, details} : any) => {
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate('List', {id: id})}>
                 <View style={[styles.List, {backgroundColor: 'lime'}]}>
@@ -130,7 +130,7 @@ const UserLists = ({navigation}:any) => {
         <Item 
             id={item.id}
             title={item.title}
-            category={item.category}
+            category={item.category.category}
             privacy={item.privacy}
             symbol={item.symbol}
             details={item.detail}

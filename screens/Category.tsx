@@ -14,33 +14,96 @@ import {
 import {styles} from '../Components/styles';
 import lists from '../Constants/dummydata';
 
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { listLists, getCategory } from '../src/graphql/queries';
+import { createList, createCategory } from '../src/graphql/mutations';
+
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
-const Category = ({navigation}:any) => {
+const Category = ({navigation, route}:any) => {
+
+    const { id } = route.params;
+
+    const [cat, setCat] = useState()
+
+    const [lists, setLists] = useState([])
+
+    useEffect(() => {
+
+        let listsarr = []
+        setLists([])
+
+        const check = async (nextToken : any) => {
+          try {  
+                let response = await API.graphql(graphqlOperation(
+                    listLists, {
+                        nextToken,
+                        filter: {
+                            categoryID: {
+                                eq: id
+                            },
+                        }
+                    }
+                ));
+                
+                for(let i = 0; i < response.data.listLists.items.length; i++ ){
+                    listsarr.push(response.data.listLists.items[i])
+                }
+            
+                if(response.data.listLists.nextToken !== null) {
+                    check(response.data.listLists.nextToken);
+                    return;
+                }
+
+                if (response.data.listLists.nextToken === null) {
+                    setLists(listsarr)
+                    return;
+                }
+            } catch (e) {
+            console.log(e)
+        }
+    }
+
+    check(null);
+    //console.log(listsarr)
+    //setLists(listsarr)
+
+    }, [])
+
+    useEffect(() => {
+        const check = async () => {
+                try {
+                    let response = await API.graphql(graphqlOperation(
+                        getCategory, {id: id}
+                    ));
+                    setCat(response.data.getCategory)
+                } catch (e) {
+                    console.log(e)
+                }
+        }
+        check();
+    }, [])
 
     const SCREEN_WIDTH = Dimensions.get('window').width;
     const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-    const Item = ({id, title, category, privacy, symbol, detail, color, numItems} : any) => {
+    const Item = ({id, title, privacy, symbol, detail} : any) => {
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate('List', {id: id})}>
-                <View style={[styles.List, {backgroundColor: color}]}>
+                <View style={[styles.List, {backgroundColor: 'lime'}]}>
                     <View style={{flexDirection: 'row'}}>
                         <View style={{marginHorizontal: 10}}>
                         <Text style={{ color: '#000', paddingVertical: 4, fontSize: 18, fontWeight: '600', textTransform: 'capitalize' }}>
                             {title}
-                        </Text>
-                        <Text style={{ color: '#000', paddingBottom: 4, fontSize: 13, fontWeight: '400', textTransform: 'capitalize' }}>
-                            {category}
                         </Text>
                     </View>
                     </View>
                     
                     <View style={{ marginHorizontal: 20}}>
                         <Text style={{ textAlign: 'center', color: '#000', paddingVertical: 4, fontSize: 26, fontWeight: '900' }}>
-                            {numItems}
+                            42
                         </Text>
                     </View>
                 </View>
@@ -52,12 +115,9 @@ const Category = ({navigation}:any) => {
         <Item 
             id={item.id}
             title={item.title}
-            category={item.category}
             privacy={item.privacy}
             symbol={item.symbol}
-            detail={item.detail}
-            color={item.color}
-            numItems={item.numItems}
+            details={item.details}
         />
       );
 
@@ -72,7 +132,7 @@ const Category = ({navigation}:any) => {
                     onPress={() => navigation.goBack()}
                 />
                 <Text style={styles.title}>
-                    Category
+                    {cat?.category.slice(0,1).toUpperCase() + cat?.category.slice(1, cat?.category.length)}
                 </Text>
                 <View style={{width: 20}}/>
             </View>

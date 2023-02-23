@@ -51,9 +51,9 @@ const SavedLists = () => {
 
                 if (savedData.data.getUser.saved.items.length > 0) {
                     for (let i = 0; i < savedData.data.getUser.saved.items.length; i++) {
-                        //if (savedData.data.getUser.saved.items[i].privacy === 'public') {
+                        if (savedData.data.getUser.saved.items[i] !== null) {
                             saved.push(savedData.data.getUser.saved.items[i].list)
-                        //}
+                        }
                     }
                 }
 
@@ -117,18 +117,27 @@ const SavedLists = () => {
         )
     }
 
-    const renderItem = ({ item } : any) => (
-        <Item 
-            id={item.id}
-            title={item.title}
-            category={item.category}
-            privacy={item.privacy}
-            symbol={item.symbol}
-            details={item.detail}
-            //color={item.color}
-            //numItems={item.numItems}
-        />
-      );
+    const renderItem = ({ item } : any) => {
+
+        let cat = ''
+
+        if (item) {
+            cat = item.category.category
+        }
+
+        return (
+            <Item 
+                id={item.id}
+                title={item.title}
+                category={cat}
+                privacy={item.privacy}
+                symbol={item.symbol}
+                details={item.detail}
+                //color={item.color}
+                //numItems={item.numItems}
+            />
+        )
+    }
 
     return (
             <View style={styles.container}>
@@ -136,7 +145,7 @@ const SavedLists = () => {
                 <FlatList 
                     data={savedLists}
                     renderItem={renderItem}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item}
                     extraData={savedLists}
                     maxToRenderPerBatch={20}
                     refreshControl={

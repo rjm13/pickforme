@@ -253,7 +253,7 @@ const List = ({navigation, route}: any) => {
                         </View>
                         <View>
                             <Text style={{color: '#fff', textTransform: 'capitalize'}}>
-                                {list?.category}
+                                {list?.category?.category}
                             </Text>
                         </View>
                     </View>

@@ -6,33 +6,37 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {useNavigation} from '@react-navigation/native';
 
-const data = [
-    {
-        id: '1',
-        title: 'food',
-        color: 'gold'
-    },
-    {
-        id: '2',
-        title: 'parenting',
-        color: 'tan'
-    },
-    {
-        id: '3',
-        title: 'things to do',
-        color: 'lime'
-    },
-    {
-        id: '4',
-        title: 'places',
-        color: 'yellow'
-    },
-    {
-        id: '5',
-        title: 'media',
-        color: 'violet'
-    },
-]
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { getUser, listCategories } from '../src/graphql/queries';
+import { updateUser } from '../src/graphql/mutations';
+
+// const data = [
+//     {
+//         id: '1',
+//         title: 'food',
+//         color: 'gold'
+//     },
+//     {
+//         id: '2',
+//         title: 'parenting',
+//         color: 'tan'
+//     },
+//     {
+//         id: '3',
+//         title: 'things to do',
+//         color: 'lime'
+//     },
+//     {
+//         id: '4',
+//         title: 'places',
+//         color: 'yellow'
+//     },
+//     {
+//         id: '5',
+//         title: 'media',
+//         color: 'violet'
+//     },
+// ]
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -40,17 +44,37 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const Categories = () => {
 
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        const check = async () => {
+                try {
+                    let response = await API.graphql(graphqlOperation(
+                        listCategories
+                    ));
+                    console.log('res is')
+                    console.log(response.data.listCategories.items)
+                    setData(response.data.listCategories.items)
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+        check();
+    }, [])
+
     //navigation hook
     const navigation = useNavigation();
 
-    const Item = ({id, title, category, privacy, symbol, detail, color} : any) => {
+    const Item = ({id, category, icon, imageUri, PrimaryColor} : any) => {
 
+
+        let text = category.slice(0,1).toUpperCase() + category.slice(1, category.length);
 
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate('Category', {id: id})}>
-               <View style={{height: 60, width: (SCREEN_WIDTH-40), alignSelf: 'center', backgroundColor: color, borderRadius: 4, marginVertical: 10, marginHorizontal: 10, justifyContent: 'center',}}>
+               <View style={{height: 60, width: (SCREEN_WIDTH-40), alignSelf: 'center', backgroundColor: PrimaryColor, borderRadius: 4, marginVertical: 10, marginHorizontal: 10, justifyContent: 'center',}}>
                     <Text style={{color: '#000', padding: 4, textAlign: 'center', fontSize: 15, fontWeight: '600'}}>
-                        {title}
+                        {text}
                     </Text>
                 </View> 
             </TouchableWithoutFeedback>
@@ -61,12 +85,10 @@ const Categories = () => {
     const renderItem = ({ item } : any) => (
         <Item 
             id={item.id}
-            title={item.title}
             category={item.category}
-            privacy={item.privacy}
-            symbol={item.symbol}
-            detail={item.detail}
-            color={item.color}
+            icon={item.icon}
+            imageUri={item.imageUri}
+            PrimaryColor={item.PrimaryColor}
         />
       );
 
