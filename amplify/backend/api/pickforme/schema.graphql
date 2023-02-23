@@ -19,7 +19,8 @@ type List @model @auth(rules: [{ allow: private, operations: [create, delete, up
     userID: ID @index(name: "byUser", sortKeyFields: ["id"])
     title: String
     privacy: String
-    category: String
+    categoryID: ID @index(name: "byCategory", sortKeyFields: ["id"])
+    category: Category @hasOne (fields: ["categoryID"])
     details: String
     imageUri: String
     color: String
@@ -27,6 +28,15 @@ type List @model @auth(rules: [{ allow: private, operations: [create, delete, up
     items: [Item] @hasMany(indexName: "byList", fields: "id")
     createdAt: String
     updatedAt: String
+}
+
+type Category @model @auth(rules: [{ allow: private, operations: [create, delete, update, read]}])
+  {
+    id: ID!
+    category: String!
+    icon: String
+    PrimaryColor: String
+    imageUri: String
 }
 
 type Item @model @auth(rules: [{ allow: private, operations: [create, delete, update, read]}]) {

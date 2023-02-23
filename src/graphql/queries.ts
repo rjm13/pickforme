@@ -15,7 +15,11 @@ export const getUser = /* GraphQL */ `
           userID
           title
           privacy
-          category
+          categoryID
+          category {
+            id
+            category
+          }
           details
           imageUri
           color
@@ -34,7 +38,10 @@ export const getUser = /* GraphQL */ `
           list {
             id
             title
-            category
+            category {
+              id
+              category
+            }
             createdAt
             updatedAt
             details
@@ -95,7 +102,16 @@ export const getList = /* GraphQL */ `
       userID
       title
       privacy
-      category
+      categoryID
+      category {
+        id
+        category
+        icon
+        PrimaryColor
+        imageUri
+        createdAt
+        updatedAt
+      }
       details
       imageUri
       color
@@ -139,7 +155,16 @@ export const listLists = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color
@@ -147,6 +172,39 @@ export const listLists = /* GraphQL */ `
         items {
           nextToken
         }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getCategory = /* GraphQL */ `
+  query GetCategory($id: ID!) {
+    getCategory(id: $id) {
+      id
+      category
+      icon
+      PrimaryColor
+      imageUri
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listCategories = /* GraphQL */ `
+  query ListCategories(
+    $filter: ModelCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCategories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        category
+        icon
+        PrimaryColor
+        imageUri
         createdAt
         updatedAt
       }
@@ -176,7 +234,16 @@ export const getItem = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color
@@ -213,7 +280,7 @@ export const listItems = /* GraphQL */ `
           userID
           title
           privacy
-          category
+          categoryID
           details
           imageUri
           color
@@ -262,7 +329,16 @@ export const getSavedList = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color
@@ -303,7 +379,7 @@ export const listSavedLists = /* GraphQL */ `
           userID
           title
           privacy
-          category
+          categoryID
           details
           imageUri
           color
@@ -353,7 +429,7 @@ export const savedListByDate = /* GraphQL */ `
           userID
           title
           privacy
-          category
+          categoryID
           details
           imageUri
           color

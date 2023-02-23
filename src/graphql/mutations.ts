@@ -18,7 +18,7 @@ export const createUser = /* GraphQL */ `
           userID
           title
           privacy
-          category
+          categoryID
           details
           imageUri
           color
@@ -60,7 +60,7 @@ export const updateUser = /* GraphQL */ `
           userID
           title
           privacy
-          category
+          categoryID
           details
           imageUri
           color
@@ -102,7 +102,7 @@ export const deleteUser = /* GraphQL */ `
           userID
           title
           privacy
-          category
+          categoryID
           details
           imageUri
           color
@@ -152,7 +152,16 @@ export const createList = /* GraphQL */ `
       userID
       title
       privacy
-      category
+      categoryID
+      category {
+        id
+        category
+        icon
+        PrimaryColor
+        imageUri
+        createdAt
+        updatedAt
+      }
       details
       imageUri
       color
@@ -200,7 +209,16 @@ export const updateList = /* GraphQL */ `
       userID
       title
       privacy
-      category
+      categoryID
+      category {
+        id
+        category
+        icon
+        PrimaryColor
+        imageUri
+        createdAt
+        updatedAt
+      }
       details
       imageUri
       color
@@ -248,7 +266,16 @@ export const deleteList = /* GraphQL */ `
       userID
       title
       privacy
-      category
+      categoryID
+      category {
+        id
+        category
+        icon
+        PrimaryColor
+        imageUri
+        createdAt
+        updatedAt
+      }
       details
       imageUri
       color
@@ -267,6 +294,54 @@ export const deleteList = /* GraphQL */ `
         }
         nextToken
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createCategory = /* GraphQL */ `
+  mutation CreateCategory(
+    $input: CreateCategoryInput!
+    $condition: ModelCategoryConditionInput
+  ) {
+    createCategory(input: $input, condition: $condition) {
+      id
+      category
+      icon
+      PrimaryColor
+      imageUri
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateCategory = /* GraphQL */ `
+  mutation UpdateCategory(
+    $input: UpdateCategoryInput!
+    $condition: ModelCategoryConditionInput
+  ) {
+    updateCategory(input: $input, condition: $condition) {
+      id
+      category
+      icon
+      PrimaryColor
+      imageUri
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteCategory = /* GraphQL */ `
+  mutation DeleteCategory(
+    $input: DeleteCategoryInput!
+    $condition: ModelCategoryConditionInput
+  ) {
+    deleteCategory(input: $input, condition: $condition) {
+      id
+      category
+      icon
+      PrimaryColor
+      imageUri
       createdAt
       updatedAt
     }
@@ -297,7 +372,16 @@ export const createItem = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color
@@ -339,7 +423,16 @@ export const updateItem = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color
@@ -381,7 +474,16 @@ export const deleteItem = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color
@@ -434,7 +536,16 @@ export const createSavedList = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color
@@ -486,7 +597,16 @@ export const updateSavedList = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color
@@ -538,7 +658,16 @@ export const deleteSavedList = /* GraphQL */ `
         userID
         title
         privacy
-        category
+        categoryID
+        category {
+          id
+          category
+          icon
+          PrimaryColor
+          imageUri
+          createdAt
+          updatedAt
+        }
         details
         imageUri
         color

@@ -18,12 +18,48 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const MyLists = () => {
 
-//get the first 4 from the data set
-    const [data, setData] = useState([{}]);
+        //update trigger
+        const [didUpdate, setDidUpdate] = useState(false);
 
-    useEffect (() => {
-      setData([lists[0], lists[1], lists[2], lists[3]])
-    }, [])
+        const [lists, setLists] = useState([]);
+    
+        const [loading, setIsLoading] = useState(false)
+    
+        useEffect(() => {
+    
+            const fetchLists = async () => {
+    
+                setIsLoading(true);
+    
+                const listsarr = []
+    
+                const userInfo = await Auth.currentAuthenticatedUser();
+    
+                if (!userInfo) {return;}
+    
+                try {
+    
+                    const userData = await API.graphql(graphqlOperation(
+                        getUser, {id: userInfo.attributes.sub}
+                    ))
+    
+                    if (userData.data.getUser.lists.items.length < 4  && userData.data.getUser.lists.items.length !== 0) {
+                        for (let i = 0; i < userData.data.getUser.lists.items.length; i++) {
+                            listsarr.push(userData.data.getUser.lists.items[i])
+                        }
+                    } else if (userData.data.getUser.lists.items.length > 4 && userData.data.getUser.lists.items.length !== 0) {
+                        for (let i = 0; i < 4; i++) {
+                            listsarr.push(userData.data.getUser.lists.items[i])
+                        }
+                    }
+                    setLists(listsarr);
+                    setIsLoading(false);
+                } catch (e) {
+                console.log(e);
+              }
+            }
+            fetchLists(); 
+          }, [didUpdate])
 
     //navigation hook
     const navigation = useNavigation();
@@ -34,7 +70,7 @@ const MyLists = () => {
 
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate('List', {id: id})}>
-                <View style={{height: 120, width: (SCREEN_WIDTH-40)/2, alignSelf: 'center', backgroundColor: color, borderRadius: 4, marginVertical: 10, marginHorizontal: 10, justifyContent: 'center',}}>
+                <View style={{height: 120, width: (SCREEN_WIDTH-40)/2, alignSelf: 'center', backgroundColor: 'yellow', borderRadius: 4, marginVertical: 10, marginHorizontal: 10, justifyContent: 'center',}}>
                     <Text style={{color: '#000', padding: 4, textAlign: 'center', fontSize: 15, fontWeight: '600'}}>
                         {title}
                     </Text>
@@ -70,7 +106,7 @@ const MyLists = () => {
             </View>
             <View>
                 <FlatList 
-                    data={data}
+                    data={lists}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
                     showsVerticalScrollIndicator={false}

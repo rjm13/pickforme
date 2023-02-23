@@ -11,8 +11,8 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 import { API, graphqlOperation, Auth } from "aws-amplify";
-import { getUser } from '../src/graphql/queries';
-import { createList } from '../src/graphql/mutations';
+import { getUser, listCategories } from '../src/graphql/queries';
+import { createList, createCategory } from '../src/graphql/mutations';
 
 const CreateList = ({navigation} : any) => {
 
@@ -29,6 +29,85 @@ const CreateList = ({navigation} : any) => {
         // }
     ]);
 
+    const [categoryInfo, setCategoryInfo] = useState({});
+
+    const [categoryText, setCategoryText] = useState('')
+
+    const [categoryList, setCategoryList] = useState([]);
+
+    // const catInputChange = (val : any) => {
+    //     if( val.length !== 0 ) {
+    //         setData({
+    //             ... data,
+    //             category: val,
+    //         });
+    //     } else {
+    //         setData({
+    //             ... data,
+    //         });
+    //     }
+    // };
+
+    const catInputChange = (val : any) => {
+        //if( val.length !== 0 ) {
+            setCategoryText(val);
+            setData({
+                ...data,
+                categoryID: ''
+            })
+        //} 
+        // else {
+        //     setCategoryText(categoryText);
+        // }
+    };
+
+    useEffect(() => {
+        const check = async () => {
+            if (categoryText !== '') {
+                try {
+
+                    let text = categoryText.toLowerCase(); 
+
+                    let response = await API.graphql(graphqlOperation(
+                        listCategories, {
+                            filter: {
+                                category: {
+                                    contains: text
+                                }
+                            }
+                        }
+                    ));
+                    console.log(response.data.listCategories.items)
+                    setCategoryList(response.data.listCategories.items)
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+        }
+        check();
+    }, [categoryText])
+
+    //check if category exists or create one
+    const CreateNewCategory = async () => {
+        try {
+                let response = await API.graphql(graphqlOperation(
+                    createCategory, {input: {
+                        category: data.category.toLowerCase(),
+                        icon: 'list',
+                        PrimaryColor: 'lime',
+                        imageUri: null,
+                    }}
+                ));
+                console.log(response);
+
+                if (response) {
+                   setCategoryInfo(response.data.createCategory)
+                }   
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
      //get the user in order to prefill the author's name
         const MakeList = async () => {
 
@@ -36,8 +115,17 @@ const CreateList = ({navigation} : any) => {
             
             if (!userInfo) {return;}
 
-            try {
-                if (userInfo) {
+            if (data.categoryID === '') {
+                try {
+                    let response1 = await API.graphql(graphqlOperation(
+                        createCategory, {input: {
+                            category: categoryText.toLowerCase(),
+                            icon: 'list',
+                            PrimaryColor: 'lime',
+                            imageUri: null,
+                        }}
+                    ));
+
                     let response = await API.graphql(graphqlOperation(
                         createList, {input: {
                             type: 'List',
@@ -45,22 +133,79 @@ const CreateList = ({navigation} : any) => {
                             updatedAt: new Date(),
                             userID: userInfo.attributes.sub,
                             title: data.title,
-                            category: data.category,
+                            categoryID: response1.data.createCategory.id,
                             details: data.details,
                             privacy: data.privacy,
                         }}
                     ));
-                    console.log(response);
-
+                    console.log(response)
                     if (response) {
-                       navigation.navigate('UserLists'); 
-                    }    
-                }
+                        navigation.navigate('UserLists'); 
+                    }   
 
-            } catch (e) {
-                console.log(e);
+                } catch (e) {
+                    console.log(e)
+                }
             }
+
+            if (data.categoryID !== '') {
+                try {
+                    let response = await API.graphql(graphqlOperation(
+                        createList, {input: {
+                            type: 'List',
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            userID: userInfo.attributes.sub,
+                            title: data.title,
+                            categoryID: data.categoryID,
+                            details: data.details,
+                            privacy: data.privacy,
+                        }}
+                    ));
+                    
+                    console.log(response);
+    
+                    if (response) {
+                        navigation.navigate('UserLists'); 
+                    }    
+                    } catch (e) {
+                    console.log(e);
+                }
+            }
+            
         }
+
+        const CategoryItem = ({category, index, id} : any) => {
+
+            const Select = () => {
+                setData({
+                    ... data,
+                    categoryID: id,
+                    category: category
+                });
+                console.log(category)
+                setCategoryList([]);
+                setCategoryText(category)
+            }
+
+            return (
+                <TouchableOpacity onPress={() => Select()}>
+                    <View style={{borderColor: '#e0e0e0a5', borderTopWidth: 0.5}}>
+                        <Text style={{color: '#fff', paddingVertical: 8}}>
+                            {category}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        }
+
+        const renderCategoryItem = ({ item, index } : any) => (
+            <CategoryItem 
+                id={item.id}
+                index={index}
+                category={item.category}
+            />
+          );
 
     const Item = ({id, name, description, symbol, index} : any) => {
         return (
@@ -98,6 +243,7 @@ const CreateList = ({navigation} : any) => {
 
     const [data, setData] = useState({
         title: '',
+        categoryID: '',
         category: '',
         details: '',
         privacy: privacy,
@@ -115,19 +261,6 @@ const CreateList = ({navigation} : any) => {
             setData({
                 ... data,
                 title: val,
-            });
-        } else {
-            setData({
-                ... data,
-            });
-        }
-    };
-
-    const catInputChange = (val : any) => {
-        if( val.length !== 0 ) {
-            setData({
-                ... data,
-                category: val,
             });
         } else {
             setData({
@@ -435,16 +568,30 @@ const CreateList = ({navigation} : any) => {
                                 Category
                             </Text>
                         </View>
-                        <View style={styles.inputfield}>
+                        <View style={[styles.inputfield, {height: categoryList.length > 0 ? 160 : 40}]}>
                             <TextInput 
+                                value={categoryText}
                                 placeholder='....'
                                 placeholderTextColor='#ffffffa5'
-                                style={styles.textInputTitle}
+                                style={[styles.textInputTitle]}
                                 maxLength={40}
-                                onChangeText={(val) => catInputChange(val)}
+                                onChangeText={(val) => {catInputChange(val)}}
                                 autoCapitalize='none'
                             />
+                            {categoryList.length > 0 ? (
+                                <View>
+                                    <FlatList 
+                                        data={categoryList}
+                                        renderItem={renderCategoryItem}
+                                        keyExtractor={item => item.id}
+                                        showsVerticalScrollIndicator={false}
+                                    />
+                                </View>
+                            ) : null
+                            }
+                             
                         </View>
+
 
                         <View style={{marginTop: 40, marginBottom: 6, alignSelf: 'flex-start', marginLeft: 20}}>
                             <Text style={styles.inputtitle}>
